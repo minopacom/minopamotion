@@ -1,0 +1,27 @@
+{
+  "id": "api/player/player",
+  "title": "Player",
+  "description": "Embeddable React component for previewing Minopamotion videos.",
+  "source": "@site/docs/api/player/player.md",
+  "sourceDirName": "api/player",
+  "slug": "/api/player/",
+  "permalink": "/minopamotion/docs/api/player/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/player/player.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "staticFile()",
+    "permalink": "/minopamotion/docs/api/core/static-file"
+  },
+  "next": {
+    "title": "PlayerRef",
+    "permalink": "/minopamotion/docs/api/player/player-ref"
+  }
+}

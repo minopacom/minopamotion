@@ -1,0 +1,27 @@
+{
+  "id": "api/core/random",
+  "title": "random()",
+  "description": "Deterministic pseudo-random number generator. Given the same seed, always returns the same value.",
+  "source": "@site/docs/api/core/random.md",
+  "sourceDirName": "api/core",
+  "slug": "/api/core/random",
+  "permalink": "/minopamotion/docs/api/core/random",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/core/random.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 20,
+  "frontMatter": {
+    "sidebar_position": 20
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "delayRender() / continueRender() / cancelRender()",
+    "permalink": "/minopamotion/docs/api/core/delay-render"
+  },
+  "next": {
+    "title": "staticFile()",
+    "permalink": "/minopamotion/docs/api/core/static-file"
+  }
+}

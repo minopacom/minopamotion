@@ -1,0 +1,278 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/minopamotion/docs",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/minopamotion/docs",
+          "mainDocId": "intro",
+          "docs": [
+            {
+              "id": "api/cli/dev",
+              "path": "/minopamotion/docs/api/cli/dev",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/cli/render",
+              "path": "/minopamotion/docs/api/cli/render",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/core/absolute-fill",
+              "path": "/minopamotion/docs/api/core/absolute-fill",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/core/audio",
+              "path": "/minopamotion/docs/api/core/audio",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/core/composition",
+              "path": "/minopamotion/docs/api/core/composition",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/core/delay-render",
+              "path": "/minopamotion/docs/api/core/delay-render",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/core/easing",
+              "path": "/minopamotion/docs/api/core/easing",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/core/freeze",
+              "path": "/minopamotion/docs/api/core/freeze",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/core/img",
+              "path": "/minopamotion/docs/api/core/img",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/core/interpolate",
+              "path": "/minopamotion/docs/api/core/interpolate",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/core/interpolate-colors",
+              "path": "/minopamotion/docs/api/core/interpolate-colors",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/core/loop",
+              "path": "/minopamotion/docs/api/core/loop",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/core/measure-spring",
+              "path": "/minopamotion/docs/api/core/measure-spring",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/core/random",
+              "path": "/minopamotion/docs/api/core/random",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/core/sequence",
+              "path": "/minopamotion/docs/api/core/sequence",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/core/series",
+              "path": "/minopamotion/docs/api/core/series",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/core/spring",
+              "path": "/minopamotion/docs/api/core/spring",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/core/static-file",
+              "path": "/minopamotion/docs/api/core/static-file",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/core/still",
+              "path": "/minopamotion/docs/api/core/still",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/core/use-current-frame",
+              "path": "/minopamotion/docs/api/core/use-current-frame",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/core/use-delay-render",
+              "path": "/minopamotion/docs/api/core/use-delay-render",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/core/use-video-config",
+              "path": "/minopamotion/docs/api/core/use-video-config",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/core/video",
+              "path": "/minopamotion/docs/api/core/video",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/player/player",
+              "path": "/minopamotion/docs/api/player/",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/player/player-ref",
+              "path": "/minopamotion/docs/api/player/player-ref",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/player/thumbnail",
+              "path": "/minopamotion/docs/api/player/thumbnail",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/renderer/bundle",
+              "path": "/minopamotion/docs/api/renderer/bundle",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/renderer/render-frames",
+              "path": "/minopamotion/docs/api/renderer/render-frames",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/renderer/render-media",
+              "path": "/minopamotion/docs/api/renderer/render-media",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/renderer/serve",
+              "path": "/minopamotion/docs/api/renderer/serve",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/renderer/stitch-frames-to-video",
+              "path": "/minopamotion/docs/api/renderer/stitch-frames-to-video",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "api/webcodecs/render-media-in-browser",
+              "path": "/minopamotion/docs/api/webcodecs/render-media-in-browser",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "concepts/animation",
+              "path": "/minopamotion/docs/concepts/animation",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "concepts/compositions",
+              "path": "/minopamotion/docs/concepts/compositions",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "concepts/media",
+              "path": "/minopamotion/docs/concepts/media",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "concepts/sequences",
+              "path": "/minopamotion/docs/concepts/sequences",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "concepts/the-fundamentals",
+              "path": "/minopamotion/docs/concepts/the-fundamentals",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "getting-started/installation",
+              "path": "/minopamotion/docs/getting-started/installation",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "getting-started/project-structure",
+              "path": "/minopamotion/docs/getting-started/project-structure",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "getting-started/your-first-video",
+              "path": "/minopamotion/docs/getting-started/your-first-video",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "intro",
+              "path": "/minopamotion/docs/intro",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "player/overview",
+              "path": "/minopamotion/docs/player/overview",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "player/player-component",
+              "path": "/minopamotion/docs/player/player-component",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "player/player-ref",
+              "path": "/minopamotion/docs/player/player-ref",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "player/thumbnail",
+              "path": "/minopamotion/docs/player/thumbnail",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "rendering/cli",
+              "path": "/minopamotion/docs/rendering/cli",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "rendering/client-side",
+              "path": "/minopamotion/docs/rendering/client-side",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "rendering/overview",
+              "path": "/minopamotion/docs/rendering/overview",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "rendering/server-side",
+              "path": "/minopamotion/docs/rendering/server-side",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "studio/overview",
+              "path": "/minopamotion/docs/studio/overview",
+              "sidebar": "docsSidebar"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "docsSidebar": {
+              "link": {
+                "path": "/minopamotion/docs/intro",
+                "label": "intro"
+              }
+            }
+          }
+        }
+      ],
+      "breadcrumbs": true
+    }
+  }
+}

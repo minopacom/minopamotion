@@ -1,0 +1,27 @@
+{
+  "id": "concepts/the-fundamentals",
+  "title": "The Fundamentals",
+  "description": "Videos as Pure Functions",
+  "source": "@site/docs/concepts/the-fundamentals.md",
+  "sourceDirName": "concepts",
+  "slug": "/concepts/the-fundamentals",
+  "permalink": "/minopamotion/docs/concepts/the-fundamentals",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/concepts/the-fundamentals.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Project Structure",
+    "permalink": "/minopamotion/docs/getting-started/project-structure"
+  },
+  "next": {
+    "title": "Compositions",
+    "permalink": "/minopamotion/docs/concepts/compositions"
+  }
+}

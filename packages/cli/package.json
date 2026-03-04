@@ -1,0 +1,19 @@
+{
+  "name": "@minopamotion/cli",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "minopamotion": "./dist/index.js"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@minopamotion/core": "workspace:*",
+    "@minopamotion/renderer": "workspace:*",
+    "commander": "^13.0.0"
+  }
+}

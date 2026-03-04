@@ -1,0 +1,27 @@
+{
+  "id": "rendering/client-side",
+  "title": "Client-Side Rendering",
+  "description": "The @minopamotion/webcodecs package renders videos directly in the browser using the WebCodecs API.",
+  "source": "@site/docs/rendering/client-side.md",
+  "sourceDirName": "rendering",
+  "slug": "/rendering/client-side",
+  "permalink": "/minopamotion/docs/rendering/client-side",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/rendering/client-side.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "sidebar_position": 3
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Server-Side Rendering",
+    "permalink": "/minopamotion/docs/rendering/server-side"
+  },
+  "next": {
+    "title": "CLI",
+    "permalink": "/minopamotion/docs/rendering/cli"
+  }
+}

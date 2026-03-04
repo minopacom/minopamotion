@@ -1,0 +1,27 @@
+{
+  "id": "player/player-component",
+  "title": "Player Component",
+  "description": "The Player component renders a Minopamotion video with playback controls.",
+  "source": "@site/docs/player/player-component.md",
+  "sourceDirName": "player",
+  "slug": "/player/player-component",
+  "permalink": "/minopamotion/docs/player/player-component",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/player/player-component.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "sidebar_position": 2
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Player Overview",
+    "permalink": "/minopamotion/docs/player/overview"
+  },
+  "next": {
+    "title": "PlayerRef",
+    "permalink": "/minopamotion/docs/player/player-ref"
+  }
+}

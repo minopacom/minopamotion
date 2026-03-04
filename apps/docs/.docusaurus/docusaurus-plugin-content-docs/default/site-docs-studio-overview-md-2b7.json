@@ -1,0 +1,27 @@
+{
+  "id": "studio/overview",
+  "title": "Studio",
+  "description": "The Minopamotion Studio is a visual editor for building and previewing videos.",
+  "source": "@site/docs/studio/overview.md",
+  "sourceDirName": "studio",
+  "slug": "/studio/overview",
+  "permalink": "/minopamotion/docs/studio/overview",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/studio/overview.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "CLI",
+    "permalink": "/minopamotion/docs/rendering/cli"
+  },
+  "next": {
+    "title": "Composition",
+    "permalink": "/minopamotion/docs/api/core/composition"
+  }
+}

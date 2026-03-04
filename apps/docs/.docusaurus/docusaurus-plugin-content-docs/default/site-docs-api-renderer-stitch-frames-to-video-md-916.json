@@ -1,0 +1,27 @@
+{
+  "id": "api/renderer/stitch-frames-to-video",
+  "title": "stitchFramesToVideo()",
+  "description": "Combines rendered frames into a video file using FFmpeg.",
+  "source": "@site/docs/api/renderer/stitch-frames-to-video.md",
+  "sourceDirName": "api/renderer",
+  "slug": "/api/renderer/stitch-frames-to-video",
+  "permalink": "/minopamotion/docs/api/renderer/stitch-frames-to-video",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/renderer/stitch-frames-to-video.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "sidebar_position": 3
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "renderFrames()",
+    "permalink": "/minopamotion/docs/api/renderer/render-frames"
+  },
+  "next": {
+    "title": "bundle()",
+    "permalink": "/minopamotion/docs/api/renderer/bundle"
+  }
+}

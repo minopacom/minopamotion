@@ -1,0 +1,27 @@
+{
+  "id": "rendering/cli",
+  "title": "CLI",
+  "description": "The @minopamotion/cli package provides a command-line interface for rendering videos.",
+  "source": "@site/docs/rendering/cli.md",
+  "sourceDirName": "rendering",
+  "slug": "/rendering/cli",
+  "permalink": "/minopamotion/docs/rendering/cli",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/rendering/cli.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 4,
+  "frontMatter": {
+    "sidebar_position": 4
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Client-Side Rendering",
+    "permalink": "/minopamotion/docs/rendering/client-side"
+  },
+  "next": {
+    "title": "Studio",
+    "permalink": "/minopamotion/docs/studio/overview"
+  }
+}

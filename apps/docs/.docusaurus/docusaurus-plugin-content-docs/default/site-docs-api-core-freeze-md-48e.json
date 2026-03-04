@@ -1,0 +1,27 @@
+{
+  "id": "api/core/freeze",
+  "title": "Freeze",
+  "description": "Freezes the timeline at a specific frame. Children always see the given frame number regardless of the actual current frame.",
+  "source": "@site/docs/api/core/freeze.md",
+  "sourceDirName": "api/core",
+  "slug": "/api/core/freeze",
+  "permalink": "/minopamotion/docs/api/core/freeze",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/core/freeze.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 5,
+  "frontMatter": {
+    "sidebar_position": 5
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Still",
+    "permalink": "/minopamotion/docs/api/core/still"
+  },
+  "next": {
+    "title": "Loop",
+    "permalink": "/minopamotion/docs/api/core/loop"
+  }
+}

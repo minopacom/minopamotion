@@ -1,0 +1,27 @@
+{
+  "id": "getting-started/your-first-video",
+  "title": "Your First Video",
+  "description": "This guide walks you through creating a simple video with Minopamotion and previewing it in the browser.",
+  "source": "@site/docs/getting-started/your-first-video.md",
+  "sourceDirName": "getting-started",
+  "slug": "/getting-started/your-first-video",
+  "permalink": "/minopamotion/docs/getting-started/your-first-video",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/getting-started/your-first-video.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "sidebar_position": 2
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Installation",
+    "permalink": "/minopamotion/docs/getting-started/installation"
+  },
+  "next": {
+    "title": "Project Structure",
+    "permalink": "/minopamotion/docs/getting-started/project-structure"
+  }
+}

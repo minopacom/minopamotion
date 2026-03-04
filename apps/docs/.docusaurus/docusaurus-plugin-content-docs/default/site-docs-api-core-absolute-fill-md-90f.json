@@ -1,0 +1,27 @@
+{
+  "id": "api/core/absolute-fill",
+  "title": "AbsoluteFill",
+  "description": "A full-screen container that fills its parent using absolute positioning. Supports ref forwarding.",
+  "source": "@site/docs/api/core/absolute-fill.md",
+  "sourceDirName": "api/core",
+  "slug": "/api/core/absolute-fill",
+  "permalink": "/minopamotion/docs/api/core/absolute-fill",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/core/absolute-fill.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "sidebar_position": 3
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Sequence",
+    "permalink": "/minopamotion/docs/api/core/sequence"
+  },
+  "next": {
+    "title": "Still",
+    "permalink": "/minopamotion/docs/api/core/still"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "api/webcodecs/render-media-in-browser",
+  "title": "renderMediaInBrowser()",
+  "description": "Renders a composition to a video file in the browser using the WebCodecs API.",
+  "source": "@site/docs/api/webcodecs/render-media-in-browser.md",
+  "sourceDirName": "api/webcodecs",
+  "slug": "/api/webcodecs/render-media-in-browser",
+  "permalink": "/minopamotion/docs/api/webcodecs/render-media-in-browser",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/webcodecs/render-media-in-browser.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "serve()",
+    "permalink": "/minopamotion/docs/api/renderer/serve"
+  },
+  "next": {
+    "title": "render",
+    "permalink": "/minopamotion/docs/api/cli/render"
+  }
+}

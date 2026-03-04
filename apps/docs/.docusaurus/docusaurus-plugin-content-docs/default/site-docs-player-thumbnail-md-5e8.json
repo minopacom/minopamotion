@@ -1,0 +1,27 @@
+{
+  "id": "player/thumbnail",
+  "title": "Thumbnail",
+  "description": "The Thumbnail component renders a single frame of a video — useful for previews, social cards, or video galleries.",
+  "source": "@site/docs/player/thumbnail.md",
+  "sourceDirName": "player",
+  "slug": "/player/thumbnail",
+  "permalink": "/minopamotion/docs/player/thumbnail",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/player/thumbnail.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 4,
+  "frontMatter": {
+    "sidebar_position": 4
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "PlayerRef",
+    "permalink": "/minopamotion/docs/player/player-ref"
+  },
+  "next": {
+    "title": "Rendering Overview",
+    "permalink": "/minopamotion/docs/rendering/overview"
+  }
+}

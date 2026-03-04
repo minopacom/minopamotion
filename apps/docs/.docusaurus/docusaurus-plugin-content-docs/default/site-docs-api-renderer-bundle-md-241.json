@@ -1,0 +1,27 @@
+{
+  "id": "api/renderer/bundle",
+  "title": "bundle()",
+  "description": "Bundles the video project into a static site that can be served for rendering.",
+  "source": "@site/docs/api/renderer/bundle.md",
+  "sourceDirName": "api/renderer",
+  "slug": "/api/renderer/bundle",
+  "permalink": "/minopamotion/docs/api/renderer/bundle",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/renderer/bundle.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 4,
+  "frontMatter": {
+    "sidebar_position": 4
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "stitchFramesToVideo()",
+    "permalink": "/minopamotion/docs/api/renderer/stitch-frames-to-video"
+  },
+  "next": {
+    "title": "serve()",
+    "permalink": "/minopamotion/docs/api/renderer/serve"
+  }
+}

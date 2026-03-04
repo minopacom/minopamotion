@@ -1,0 +1,27 @@
+{
+  "id": "api/renderer/render-frames",
+  "title": "renderFrames()",
+  "description": "Renders individual frames of a composition as images.",
+  "source": "@site/docs/api/renderer/render-frames.md",
+  "sourceDirName": "api/renderer",
+  "slug": "/api/renderer/render-frames",
+  "permalink": "/minopamotion/docs/api/renderer/render-frames",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/renderer/render-frames.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "sidebar_position": 2
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "renderMedia()",
+    "permalink": "/minopamotion/docs/api/renderer/render-media"
+  },
+  "next": {
+    "title": "stitchFramesToVideo()",
+    "permalink": "/minopamotion/docs/api/renderer/stitch-frames-to-video"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "api/renderer/serve",
+  "title": "serve()",
+  "description": "Starts a local HTTP server to serve a bundled video project.",
+  "source": "@site/docs/api/renderer/serve.md",
+  "sourceDirName": "api/renderer",
+  "slug": "/api/renderer/serve",
+  "permalink": "/minopamotion/docs/api/renderer/serve",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/renderer/serve.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 5,
+  "frontMatter": {
+    "sidebar_position": 5
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "bundle()",
+    "permalink": "/minopamotion/docs/api/renderer/bundle"
+  },
+  "next": {
+    "title": "renderMediaInBrowser()",
+    "permalink": "/minopamotion/docs/api/webcodecs/render-media-in-browser"
+  }
+}

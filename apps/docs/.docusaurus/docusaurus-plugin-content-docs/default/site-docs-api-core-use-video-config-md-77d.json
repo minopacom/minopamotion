@@ -1,0 +1,27 @@
+{
+  "id": "api/core/use-video-config",
+  "title": "useVideoConfig()",
+  "description": "Returns the video configuration. Throws if called outside a Composition or Player.",
+  "source": "@site/docs/api/core/use-video-config.md",
+  "sourceDirName": "api/core",
+  "slug": "/api/core/use-video-config",
+  "permalink": "/minopamotion/docs/api/core/use-video-config",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/core/use-video-config.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 12,
+  "frontMatter": {
+    "sidebar_position": 12
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "useCurrentFrame()",
+    "permalink": "/minopamotion/docs/api/core/use-current-frame"
+  },
+  "next": {
+    "title": "useDelayRender()",
+    "permalink": "/minopamotion/docs/api/core/use-delay-render"
+  }
+}

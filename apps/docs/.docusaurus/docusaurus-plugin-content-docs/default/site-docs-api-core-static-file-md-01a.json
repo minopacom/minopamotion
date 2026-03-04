@@ -1,0 +1,27 @@
+{
+  "id": "api/core/static-file",
+  "title": "staticFile()",
+  "description": "Returns the path to a file in the public/ directory.",
+  "source": "@site/docs/api/core/static-file.md",
+  "sourceDirName": "api/core",
+  "slug": "/api/core/static-file",
+  "permalink": "/minopamotion/docs/api/core/static-file",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/core/static-file.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 21,
+  "frontMatter": {
+    "sidebar_position": 21
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "random()",
+    "permalink": "/minopamotion/docs/api/core/random"
+  },
+  "next": {
+    "title": "Player",
+    "permalink": "/minopamotion/docs/api/player/"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "concepts/animation",
+  "title": "Animation",
+  "description": "Minopamotion provides two animation primitives: interpolate for linear/eased animations and spring for physics-based animations.",
+  "source": "@site/docs/concepts/animation.md",
+  "sourceDirName": "concepts",
+  "slug": "/concepts/animation",
+  "permalink": "/minopamotion/docs/concepts/animation",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/concepts/animation.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 4,
+  "frontMatter": {
+    "sidebar_position": 4
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Sequences",
+    "permalink": "/minopamotion/docs/concepts/sequences"
+  },
+  "next": {
+    "title": "Media",
+    "permalink": "/minopamotion/docs/concepts/media"
+  }
+}

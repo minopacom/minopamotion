@@ -1,0 +1,27 @@
+{
+  "id": "api/core/loop",
+  "title": "Loop",
+  "description": "Repeats its children for a specified number of times or indefinitely.",
+  "source": "@site/docs/api/core/loop.md",
+  "sourceDirName": "api/core",
+  "slug": "/api/core/loop",
+  "permalink": "/minopamotion/docs/api/core/loop",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/core/loop.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 6,
+  "frontMatter": {
+    "sidebar_position": 6
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Freeze",
+    "permalink": "/minopamotion/docs/api/core/freeze"
+  },
+  "next": {
+    "title": "Series",
+    "permalink": "/minopamotion/docs/api/core/series"
+  }
+}

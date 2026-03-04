@@ -1,0 +1,27 @@
+{
+  "id": "api/renderer/render-media",
+  "title": "renderMedia()",
+  "description": "Renders a composition to a video file.",
+  "source": "@site/docs/api/renderer/render-media.md",
+  "sourceDirName": "api/renderer",
+  "slug": "/api/renderer/render-media",
+  "permalink": "/minopamotion/docs/api/renderer/render-media",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/renderer/render-media.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Thumbnail",
+    "permalink": "/minopamotion/docs/api/player/thumbnail"
+  },
+  "next": {
+    "title": "renderFrames()",
+    "permalink": "/minopamotion/docs/api/renderer/render-frames"
+  }
+}

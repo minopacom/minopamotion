@@ -1,0 +1,27 @@
+{
+  "id": "api/core/measure-spring",
+  "title": "measureSpring()",
+  "description": "Calculates the number of frames a spring animation takes to settle.",
+  "source": "@site/docs/api/core/measure-spring.md",
+  "sourceDirName": "api/core",
+  "slug": "/api/core/measure-spring",
+  "permalink": "/minopamotion/docs/api/core/measure-spring",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/core/measure-spring.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 17,
+  "frontMatter": {
+    "sidebar_position": 17
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "spring()",
+    "permalink": "/minopamotion/docs/api/core/spring"
+  },
+  "next": {
+    "title": "Easing",
+    "permalink": "/minopamotion/docs/api/core/easing"
+  }
+}

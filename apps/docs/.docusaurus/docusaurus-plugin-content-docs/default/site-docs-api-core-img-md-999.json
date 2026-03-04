@@ -1,0 +1,27 @@
+{
+  "id": "api/core/img",
+  "title": "Img",
+  "description": "Renders an image with delay render support. The render waits until the image has loaded.",
+  "source": "@site/docs/api/core/img.md",
+  "sourceDirName": "api/core",
+  "slug": "/api/core/img",
+  "permalink": "/minopamotion/docs/api/core/img",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/core/img.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 8,
+  "frontMatter": {
+    "sidebar_position": 8
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Series",
+    "permalink": "/minopamotion/docs/api/core/series"
+  },
+  "next": {
+    "title": "Audio",
+    "permalink": "/minopamotion/docs/api/core/audio"
+  }
+}

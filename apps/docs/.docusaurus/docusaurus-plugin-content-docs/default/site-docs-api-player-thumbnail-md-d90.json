@@ -1,0 +1,27 @@
+{
+  "id": "api/player/thumbnail",
+  "title": "Thumbnail",
+  "description": "Renders a single frame of a video. Useful for previews and galleries.",
+  "source": "@site/docs/api/player/thumbnail.md",
+  "sourceDirName": "api/player",
+  "slug": "/api/player/thumbnail",
+  "permalink": "/minopamotion/docs/api/player/thumbnail",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/player/thumbnail.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "sidebar_position": 3
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "PlayerRef",
+    "permalink": "/minopamotion/docs/api/player/player-ref"
+  },
+  "next": {
+    "title": "renderMedia()",
+    "permalink": "/minopamotion/docs/api/renderer/render-media"
+  }
+}

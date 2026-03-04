@@ -1,0 +1,27 @@
+{
+  "id": "api/core/audio",
+  "title": "Audio",
+  "description": "Plays audio synchronized to the timeline.",
+  "source": "@site/docs/api/core/audio.md",
+  "sourceDirName": "api/core",
+  "slug": "/api/core/audio",
+  "permalink": "/minopamotion/docs/api/core/audio",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/core/audio.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 9,
+  "frontMatter": {
+    "sidebar_position": 9
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Img",
+    "permalink": "/minopamotion/docs/api/core/img"
+  },
+  "next": {
+    "title": "Video",
+    "permalink": "/minopamotion/docs/api/core/video"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "api/core/sequence",
+  "title": "Sequence",
+  "description": "Shifts the timeline for its children. Inside a Sequence, useCurrentFrame() returns 0 at the frame specified by from.",
+  "source": "@site/docs/api/core/sequence.md",
+  "sourceDirName": "api/core",
+  "slug": "/api/core/sequence",
+  "permalink": "/minopamotion/docs/api/core/sequence",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/core/sequence.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "sidebar_position": 2
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Composition",
+    "permalink": "/minopamotion/docs/api/core/composition"
+  },
+  "next": {
+    "title": "AbsoluteFill",
+    "permalink": "/minopamotion/docs/api/core/absolute-fill"
+  }
+}

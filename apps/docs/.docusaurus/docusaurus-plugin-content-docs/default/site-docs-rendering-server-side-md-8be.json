@@ -1,0 +1,27 @@
+{
+  "id": "rendering/server-side",
+  "title": "Server-Side Rendering",
+  "description": "The @minopamotion/renderer package renders videos on the server using Puppeteer for frame capture and FFmpeg for encoding.",
+  "source": "@site/docs/rendering/server-side.md",
+  "sourceDirName": "rendering",
+  "slug": "/rendering/server-side",
+  "permalink": "/minopamotion/docs/rendering/server-side",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/rendering/server-side.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "sidebar_position": 2
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Rendering Overview",
+    "permalink": "/minopamotion/docs/rendering/overview"
+  },
+  "next": {
+    "title": "Client-Side Rendering",
+    "permalink": "/minopamotion/docs/rendering/client-side"
+  }
+}

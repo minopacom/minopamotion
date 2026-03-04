@@ -1,0 +1,27 @@
+{
+  "id": "api/core/interpolate",
+  "title": "interpolate()",
+  "description": "Maps an input value from one range to another, with optional easing and extrapolation.",
+  "source": "@site/docs/api/core/interpolate.md",
+  "sourceDirName": "api/core",
+  "slug": "/api/core/interpolate",
+  "permalink": "/minopamotion/docs/api/core/interpolate",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/core/interpolate.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 14,
+  "frontMatter": {
+    "sidebar_position": 14
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "useDelayRender()",
+    "permalink": "/minopamotion/docs/api/core/use-delay-render"
+  },
+  "next": {
+    "title": "interpolateColors()",
+    "permalink": "/minopamotion/docs/api/core/interpolate-colors"
+  }
+}

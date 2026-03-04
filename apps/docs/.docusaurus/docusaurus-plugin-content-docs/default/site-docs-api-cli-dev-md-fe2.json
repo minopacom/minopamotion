@@ -1,0 +1,23 @@
+{
+  "id": "api/cli/dev",
+  "title": "dev",
+  "description": "Starts a development server with live preview.",
+  "source": "@site/docs/api/cli/dev.md",
+  "sourceDirName": "api/cli",
+  "slug": "/api/cli/dev",
+  "permalink": "/minopamotion/docs/api/cli/dev",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/cli/dev.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "sidebar_position": 2
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "render",
+    "permalink": "/minopamotion/docs/api/cli/render"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "api/player/player-ref",
+  "title": "PlayerRef",
+  "description": "Imperative API for controlling the Player programmatically.",
+  "source": "@site/docs/api/player/player-ref.md",
+  "sourceDirName": "api/player",
+  "slug": "/api/player/player-ref",
+  "permalink": "/minopamotion/docs/api/player/player-ref",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/player/player-ref.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "sidebar_position": 2
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Player",
+    "permalink": "/minopamotion/docs/api/player/"
+  },
+  "next": {
+    "title": "Thumbnail",
+    "permalink": "/minopamotion/docs/api/player/thumbnail"
+  }
+}

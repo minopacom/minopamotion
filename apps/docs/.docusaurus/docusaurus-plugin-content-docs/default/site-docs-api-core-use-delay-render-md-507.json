@@ -1,0 +1,27 @@
+{
+  "id": "api/core/use-delay-render",
+  "title": "useDelayRender()",
+  "description": "Hook version of delayRender / continueRender. Delays rendering until the returned callback is called.",
+  "source": "@site/docs/api/core/use-delay-render.md",
+  "sourceDirName": "api/core",
+  "slug": "/api/core/use-delay-render",
+  "permalink": "/minopamotion/docs/api/core/use-delay-render",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/core/use-delay-render.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 13,
+  "frontMatter": {
+    "sidebar_position": 13
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "useVideoConfig()",
+    "permalink": "/minopamotion/docs/api/core/use-video-config"
+  },
+  "next": {
+    "title": "interpolate()",
+    "permalink": "/minopamotion/docs/api/core/interpolate"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "concepts/compositions",
+  "title": "Compositions",
+  "description": "A Composition registers a video with its configuration. It defines what component to render and the video dimensions, fps, and duration.",
+  "source": "@site/docs/concepts/compositions.md",
+  "sourceDirName": "concepts",
+  "slug": "/concepts/compositions",
+  "permalink": "/minopamotion/docs/concepts/compositions",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/concepts/compositions.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "sidebar_position": 2
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "The Fundamentals",
+    "permalink": "/minopamotion/docs/concepts/the-fundamentals"
+  },
+  "next": {
+    "title": "Sequences",
+    "permalink": "/minopamotion/docs/concepts/sequences"
+  }
+}

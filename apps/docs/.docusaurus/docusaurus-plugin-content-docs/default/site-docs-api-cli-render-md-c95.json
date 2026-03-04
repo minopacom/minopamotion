@@ -1,0 +1,27 @@
+{
+  "id": "api/cli/render",
+  "title": "render",
+  "description": "Renders a composition to a video file.",
+  "source": "@site/docs/api/cli/render.md",
+  "sourceDirName": "api/cli",
+  "slug": "/api/cli/render",
+  "permalink": "/minopamotion/docs/api/cli/render",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/cli/render.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "renderMediaInBrowser()",
+    "permalink": "/minopamotion/docs/api/webcodecs/render-media-in-browser"
+  },
+  "next": {
+    "title": "dev",
+    "permalink": "/minopamotion/docs/api/cli/dev"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "api/core/easing",
+  "title": "Easing",
+  "description": "A collection of easing functions for use with interpolate.",
+  "source": "@site/docs/api/core/easing.md",
+  "sourceDirName": "api/core",
+  "slug": "/api/core/easing",
+  "permalink": "/minopamotion/docs/api/core/easing",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/core/easing.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 18,
+  "frontMatter": {
+    "sidebar_position": 18
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "measureSpring()",
+    "permalink": "/minopamotion/docs/api/core/measure-spring"
+  },
+  "next": {
+    "title": "delayRender() / continueRender() / cancelRender()",
+    "permalink": "/minopamotion/docs/api/core/delay-render"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "api/core/delay-render",
+  "title": "delayRender() / continueRender() / cancelRender()",
+  "description": "Low-level API for delaying frame capture until async operations complete.",
+  "source": "@site/docs/api/core/delay-render.md",
+  "sourceDirName": "api/core",
+  "slug": "/api/core/delay-render",
+  "permalink": "/minopamotion/docs/api/core/delay-render",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/core/delay-render.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 19,
+  "frontMatter": {
+    "sidebar_position": 19
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Easing",
+    "permalink": "/minopamotion/docs/api/core/easing"
+  },
+  "next": {
+    "title": "random()",
+    "permalink": "/minopamotion/docs/api/core/random"
+  }
+}

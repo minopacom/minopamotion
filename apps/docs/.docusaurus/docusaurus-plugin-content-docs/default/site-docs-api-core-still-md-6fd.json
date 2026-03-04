@@ -1,0 +1,27 @@
+{
+  "id": "api/core/still",
+  "title": "Still",
+  "description": "A single-frame composition for generating images. Equivalent to a Composition with durationInFrames= and fps={1}.",
+  "source": "@site/docs/api/core/still.md",
+  "sourceDirName": "api/core",
+  "slug": "/api/core/still",
+  "permalink": "/minopamotion/docs/api/core/still",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/core/still.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 4,
+  "frontMatter": {
+    "sidebar_position": 4
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "AbsoluteFill",
+    "permalink": "/minopamotion/docs/api/core/absolute-fill"
+  },
+  "next": {
+    "title": "Freeze",
+    "permalink": "/minopamotion/docs/api/core/freeze"
+  }
+}

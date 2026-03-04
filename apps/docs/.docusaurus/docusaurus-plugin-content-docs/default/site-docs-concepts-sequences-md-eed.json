@@ -1,0 +1,27 @@
+{
+  "id": "concepts/sequences",
+  "title": "Sequences",
+  "description": "A Sequence shifts the timeline for its children. It lets you arrange elements in time without manually calculating frame offsets.",
+  "source": "@site/docs/concepts/sequences.md",
+  "sourceDirName": "concepts",
+  "slug": "/concepts/sequences",
+  "permalink": "/minopamotion/docs/concepts/sequences",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/concepts/sequences.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "sidebar_position": 3
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Compositions",
+    "permalink": "/minopamotion/docs/concepts/compositions"
+  },
+  "next": {
+    "title": "Animation",
+    "permalink": "/minopamotion/docs/concepts/animation"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "api/core/use-current-frame",
+  "title": "useCurrentFrame()",
+  "description": "Returns the current frame number. Inside a Sequence, the frame is relative to the sequence start.",
+  "source": "@site/docs/api/core/use-current-frame.md",
+  "sourceDirName": "api/core",
+  "slug": "/api/core/use-current-frame",
+  "permalink": "/minopamotion/docs/api/core/use-current-frame",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/core/use-current-frame.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 11,
+  "frontMatter": {
+    "sidebar_position": 11
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Video",
+    "permalink": "/minopamotion/docs/api/core/video"
+  },
+  "next": {
+    "title": "useVideoConfig()",
+    "permalink": "/minopamotion/docs/api/core/use-video-config"
+  }
+}

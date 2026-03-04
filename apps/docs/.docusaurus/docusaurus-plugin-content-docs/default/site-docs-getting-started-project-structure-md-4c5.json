@@ -1,0 +1,27 @@
+{
+  "id": "getting-started/project-structure",
+  "title": "Project Structure",
+  "description": "Minopamotion is organized as a monorepo with several packages.",
+  "source": "@site/docs/getting-started/project-structure.md",
+  "sourceDirName": "getting-started",
+  "slug": "/getting-started/project-structure",
+  "permalink": "/minopamotion/docs/getting-started/project-structure",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/getting-started/project-structure.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "sidebar_position": 3
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Your First Video",
+    "permalink": "/minopamotion/docs/getting-started/your-first-video"
+  },
+  "next": {
+    "title": "The Fundamentals",
+    "permalink": "/minopamotion/docs/concepts/the-fundamentals"
+  }
+}

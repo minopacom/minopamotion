@@ -1,0 +1,27 @@
+{
+  "id": "concepts/media",
+  "title": "Media",
+  "description": "Minopamotion provides components for embedding images, audio, and video that synchronize with the timeline.",
+  "source": "@site/docs/concepts/media.md",
+  "sourceDirName": "concepts",
+  "slug": "/concepts/media",
+  "permalink": "/minopamotion/docs/concepts/media",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/concepts/media.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 5,
+  "frontMatter": {
+    "sidebar_position": 5
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Animation",
+    "permalink": "/minopamotion/docs/concepts/animation"
+  },
+  "next": {
+    "title": "Player Overview",
+    "permalink": "/minopamotion/docs/player/overview"
+  }
+}

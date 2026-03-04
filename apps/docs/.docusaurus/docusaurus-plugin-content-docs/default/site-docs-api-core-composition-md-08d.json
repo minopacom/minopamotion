@@ -1,0 +1,27 @@
+{
+  "id": "api/core/composition",
+  "title": "Composition",
+  "description": "Registers a video composition with its configuration. The component renders nothing — it registers via a useEffect side effect.",
+  "source": "@site/docs/api/core/composition.md",
+  "sourceDirName": "api/core",
+  "slug": "/api/core/composition",
+  "permalink": "/minopamotion/docs/api/core/composition",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/core/composition.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Studio",
+    "permalink": "/minopamotion/docs/studio/overview"
+  },
+  "next": {
+    "title": "Sequence",
+    "permalink": "/minopamotion/docs/api/core/sequence"
+  }
+}

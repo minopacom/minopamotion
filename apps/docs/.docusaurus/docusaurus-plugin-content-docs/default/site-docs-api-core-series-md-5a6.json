@@ -1,0 +1,27 @@
+{
+  "id": "api/core/series",
+  "title": "Series",
+  "description": "Arranges children sequentially in time. Each child plays after the previous one finishes.",
+  "source": "@site/docs/api/core/series.md",
+  "sourceDirName": "api/core",
+  "slug": "/api/core/series",
+  "permalink": "/minopamotion/docs/api/core/series",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/core/series.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 7,
+  "frontMatter": {
+    "sidebar_position": 7
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Loop",
+    "permalink": "/minopamotion/docs/api/core/loop"
+  },
+  "next": {
+    "title": "Img",
+    "permalink": "/minopamotion/docs/api/core/img"
+  }
+}

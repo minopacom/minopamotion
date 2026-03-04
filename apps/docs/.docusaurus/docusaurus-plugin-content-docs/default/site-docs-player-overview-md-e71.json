@@ -1,0 +1,27 @@
+{
+  "id": "player/overview",
+  "title": "Player Overview",
+  "description": "The @minopamotion/player package provides an embeddable React component for previewing Minopamotion videos in the browser.",
+  "source": "@site/docs/player/overview.md",
+  "sourceDirName": "player",
+  "slug": "/player/overview",
+  "permalink": "/minopamotion/docs/player/overview",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/player/overview.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Media",
+    "permalink": "/minopamotion/docs/concepts/media"
+  },
+  "next": {
+    "title": "Player Component",
+    "permalink": "/minopamotion/docs/player/player-component"
+  }
+}

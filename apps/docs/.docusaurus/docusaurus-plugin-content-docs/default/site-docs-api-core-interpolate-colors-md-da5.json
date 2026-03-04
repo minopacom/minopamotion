@@ -1,0 +1,27 @@
+{
+  "id": "api/core/interpolate-colors",
+  "title": "interpolateColors()",
+  "description": "Interpolates between colors. Supports hex, rgb, and rgba formats.",
+  "source": "@site/docs/api/core/interpolate-colors.md",
+  "sourceDirName": "api/core",
+  "slug": "/api/core/interpolate-colors",
+  "permalink": "/minopamotion/docs/api/core/interpolate-colors",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/core/interpolate-colors.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 15,
+  "frontMatter": {
+    "sidebar_position": 15
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "interpolate()",
+    "permalink": "/minopamotion/docs/api/core/interpolate"
+  },
+  "next": {
+    "title": "spring()",
+    "permalink": "/minopamotion/docs/api/core/spring"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "api/core/spring",
+  "title": "spring()",
+  "description": "Physics-based spring animation. Returns a value that animates from from to to.",
+  "source": "@site/docs/api/core/spring.md",
+  "sourceDirName": "api/core",
+  "slug": "/api/core/spring",
+  "permalink": "/minopamotion/docs/api/core/spring",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/core/spring.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 16,
+  "frontMatter": {
+    "sidebar_position": 16
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "interpolateColors()",
+    "permalink": "/minopamotion/docs/api/core/interpolate-colors"
+  },
+  "next": {
+    "title": "measureSpring()",
+    "permalink": "/minopamotion/docs/api/core/measure-spring"
+  }
+}

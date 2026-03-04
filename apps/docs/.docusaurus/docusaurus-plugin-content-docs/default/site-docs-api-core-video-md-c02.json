@@ -1,0 +1,27 @@
+{
+  "id": "api/core/video",
+  "title": "Video",
+  "description": "Embeds a video synchronized to the timeline.",
+  "source": "@site/docs/api/core/video.md",
+  "sourceDirName": "api/core",
+  "slug": "/api/core/video",
+  "permalink": "/minopamotion/docs/api/core/video",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/minopacom/minopamotion/tree/main/apps/docs/docs/api/core/video.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 10,
+  "frontMatter": {
+    "sidebar_position": 10
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Audio",
+    "permalink": "/minopamotion/docs/api/core/audio"
+  },
+  "next": {
+    "title": "useCurrentFrame()",
+    "permalink": "/minopamotion/docs/api/core/use-current-frame"
+  }
+}
