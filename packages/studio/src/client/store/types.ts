@@ -20,6 +20,8 @@ export interface StudioState extends EditorState {
 	volume: number;
 	playbackRate: number;
 	previewZoom: number;
+	canvasZoom: number;
+	canvasZoomFitToScreen: boolean;
 	showCheckerboard: boolean;
 	inPoint: number | null;
 	outPoint: number | null;
@@ -32,6 +34,7 @@ export interface StudioState extends EditorState {
 	showQuickSwitcher: boolean;
 	showRenderDialog: boolean;
 	tracks: TrackDefinition[];
+	snappingEnabled: boolean;
 }
 
 export type StudioAction =
@@ -54,6 +57,11 @@ export type StudioAction =
 	| { type: 'SET_VOLUME'; volume: number }
 	| { type: 'SET_PLAYBACK_RATE'; rate: number }
 	| { type: 'SET_PREVIEW_ZOOM'; zoom: number }
+	| { type: 'SET_CANVAS_ZOOM'; zoom: number }
+	| { type: 'CANVAS_ZOOM_IN' }
+	| { type: 'CANVAS_ZOOM_OUT' }
+	| { type: 'CANVAS_ZOOM_RESET' }
+	| { type: 'CANVAS_ZOOM_FIT' }
 	| { type: 'TOGGLE_CHECKERBOARD' }
 	| { type: 'SET_IN_POINT'; frame: number }
 	| { type: 'SET_OUT_POINT'; frame: number }
@@ -66,4 +74,5 @@ export type StudioAction =
 	| { type: 'SHOW_SHORTCUTS_HELP'; show: boolean }
 	| { type: 'SHOW_QUICK_SWITCHER'; show: boolean }
 	| { type: 'SHOW_RENDER_DIALOG'; show: boolean }
-	| { type: 'SET_TRACKS'; tracks: TrackDefinition[] };
+	| { type: 'SET_TRACKS'; tracks: TrackDefinition[] }
+	| { type: 'TOGGLE_SNAPPING' };

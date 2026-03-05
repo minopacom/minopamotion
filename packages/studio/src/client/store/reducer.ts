@@ -5,11 +5,18 @@ import {
 } from '../editor/editor-state.js';
 
 function clampFrame(frame: number, state: StudioState): number {
-	const comp = state.compositions.find(
-		(c) => c.id === state.selectedCompositionId,
-	);
-	if (!comp) return 0;
-	return Math.max(0, Math.min(frame, comp.durationInFrames - 1));
+	// Use editor scene duration if in editor mode, otherwise use composition duration
+	let maxFrame: number;
+	if (state.editorMode) {
+		maxFrame = state.editorScene.settings.durationInFrames - 1;
+	} else {
+		const comp = state.compositions.find(
+			(c) => c.id === state.selectedCompositionId,
+		);
+		if (!comp) return 0;
+		maxFrame = comp.durationInFrames - 1;
+	}
+	return Math.max(0, Math.min(frame, maxFrame));
 }
 
 function getSelectedComposition(state: StudioState) {
@@ -120,6 +127,40 @@ export function studioReducer(
 		case 'SET_PREVIEW_ZOOM':
 			return { ...state, previewZoom: action.zoom };
 
+		case 'SET_CANVAS_ZOOM':
+			return {
+				...state,
+				canvasZoom: Math.max(0.1, Math.min(5, action.zoom)),
+				canvasZoomFitToScreen: false,
+			};
+
+		case 'CANVAS_ZOOM_IN':
+			return {
+				...state,
+				canvasZoom: Math.min(5, state.canvasZoom * 1.2),
+				canvasZoomFitToScreen: false,
+			};
+
+		case 'CANVAS_ZOOM_OUT':
+			return {
+				...state,
+				canvasZoom: Math.max(0.1, state.canvasZoom / 1.2),
+				canvasZoomFitToScreen: false,
+			};
+
+		case 'CANVAS_ZOOM_RESET':
+			return {
+				...state,
+				canvasZoom: 1,
+				canvasZoomFitToScreen: false,
+			};
+
+		case 'CANVAS_ZOOM_FIT':
+			return {
+				...state,
+				canvasZoomFitToScreen: true,
+			};
+
 		case 'TOGGLE_CHECKERBOARD':
 			return { ...state, showCheckerboard: !state.showCheckerboard };
 
@@ -176,6 +217,9 @@ export function studioReducer(
 
 		case 'SET_TRACKS':
 			return { ...state, tracks: action.tracks };
+
+		case 'TOGGLE_SNAPPING':
+			return { ...state, snappingEnabled: !state.snappingEnabled };
 
 		default:
 			return state;

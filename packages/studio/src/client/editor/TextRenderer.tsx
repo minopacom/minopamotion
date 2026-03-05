@@ -29,6 +29,15 @@ export function TextRenderer({ element }: TextRendererProps) {
 				wordBreak: 'break-word',
 				overflow: 'hidden',
 				userSelect: 'none',
+				// Add text stroke for better visibility on any background
+				textShadow: `
+					-2px -2px 0 #000,
+					2px -2px 0 #000,
+					-2px 2px 0 #000,
+					2px 2px 0 #000,
+					0 0 10px rgba(0,0,0,0.5)
+				`,
+				WebkitTextStroke: '1px rgba(0,0,0,0.5)',
 			}}
 		>
 			{element.text}

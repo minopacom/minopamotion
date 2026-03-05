@@ -30,12 +30,18 @@ export function createTextElement(
 		trackId,
 		from: 0,
 		durationInFrames: 150,
-		transform: { ...defaultTransform },
-		text: 'Hello World',
-		fontSize: 48,
-		fontFamily: 'sans-serif',
+		transform: {
+			...defaultTransform,
+			x: 100, // Center-ish position for better visibility
+			y: 100,
+			width: 600,
+			height: 100,
+		},
+		text: 'Double-click to edit',
+		fontSize: 64,
+		fontFamily: 'Arial, sans-serif',
 		fontWeight: 700,
-		color: '#ffffff',
+		color: '#FFD700', // Gold color - highly visible on most backgrounds
 		textAlign: 'center',
 		lineHeight: 1.2,
 		...overrides,

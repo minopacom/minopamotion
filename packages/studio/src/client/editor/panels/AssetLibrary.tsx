@@ -7,10 +7,12 @@ import {
 	createAudioElement,
 	createEditorTrack,
 } from '../defaults.js';
+import { getMediaDurationInFrames } from '../utils/media-duration.js';
+import { getMediaDimensions, fitToCanvas } from '../utils/fit-to-canvas.js';
 import { colors } from '../../utils/colors.js';
 
 export function AssetLibrary() {
-	const { editorScene } = useStudioState();
+	const { editorScene, compositions, selectedCompositionId } = useStudioState();
 	const dispatch = useStudioDispatch();
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -39,30 +41,110 @@ export function AssetLibrary() {
 		dispatch({ type: 'HISTORY_COMMIT' });
 	};
 
-	const handleAssetClick = (assetId: string) => {
+	const handleAssetClick = async (assetId: string) => {
 		const asset = editorScene.assets.find((a) => a.id === assetId);
 		if (!asset) return;
 
-		// Ensure there's at least one track
-		let trackId = editorScene.tracks[editorScene.tracks.length - 1]?.id;
-		if (!trackId) {
-			const track = createEditorTrack({ name: 'Track 1' });
-			dispatch({ type: 'ADD_EDITOR_TRACK', track });
-			trackId = track.id;
-		}
+		// Get composition to know the FPS
+		const comp = compositions.find((c) => c.id === selectedCompositionId);
+		const fps = comp?.fps ?? 30;
+
+		// Create a new track for each media item (professional editor behavior)
+		const trackNumber = editorScene.tracks.length + 1;
+		const track = createEditorTrack({ name: `Track ${trackNumber}` });
+		dispatch({ type: 'ADD_EDITOR_TRACK', track });
+		const trackId = track.id;
+
+		// New media always starts at frame 0 on its own track
+		const startFrame = 0;
+
+		// Get canvas dimensions
+		const canvasWidth = editorScene.settings.width;
+		const canvasHeight = editorScene.settings.height;
 
 		// Create element based on asset type
 		let element;
 		if (asset.type === 'image') {
-			element = createImageElement(trackId, asset.src);
+			// Detect image dimensions and fit to canvas
+			try {
+				const { width, height } = await getMediaDimensions(asset.src, 'image');
+				const fitted = fitToCanvas(width, height, canvasWidth, canvasHeight);
+
+				element = createImageElement(trackId, asset.src, {
+					from: startFrame,
+					transform: {
+						x: fitted.x,
+						y: fitted.y,
+						width: fitted.width,
+						height: fitted.height,
+						rotation: 0,
+						opacity: 1,
+					},
+				});
+			} catch (error) {
+				console.error('Failed to detect image dimensions:', error);
+				element = createImageElement(trackId, asset.src, { from: startFrame });
+			}
 		} else if (asset.type === 'video') {
-			element = createVideoElement(trackId, asset.src);
+			// Detect video duration and dimensions
+			try {
+				const durationInFrames = await getMediaDurationInFrames(
+					asset.src,
+					fps,
+					'video',
+				);
+				const { width, height } = await getMediaDimensions(asset.src, 'video');
+				const fitted = fitToCanvas(width, height, canvasWidth, canvasHeight);
+
+				element = createVideoElement(trackId, asset.src, {
+					from: startFrame,
+					durationInFrames,
+					transform: {
+						x: fitted.x,
+						y: fitted.y,
+						width: fitted.width,
+						height: fitted.height,
+						rotation: 0,
+						opacity: 1,
+					},
+				});
+			} catch (error) {
+				console.error('Failed to detect video properties:', error);
+				element = createVideoElement(trackId, asset.src, { from: startFrame });
+			}
 		} else {
-			element = createAudioElement(trackId, asset.src);
+			// Detect audio duration
+			try {
+				const durationInFrames = await getMediaDurationInFrames(
+					asset.src,
+					fps,
+					'audio',
+				);
+				element = createAudioElement(trackId, asset.src, { from: startFrame, durationInFrames });
+			} catch (error) {
+				console.error('Failed to detect audio duration:', error);
+				element = createAudioElement(trackId, asset.src, { from: startFrame });
+			}
 		}
 
 		dispatch({ type: 'ADD_ELEMENT', element });
 		dispatch({ type: 'SELECT_ELEMENTS', ids: [element.id] });
+
+		// Auto-extend composition duration if the element extends beyond current duration
+		const elementEnd = element.from + element.durationInFrames;
+		const currentDuration = editorScene.settings.durationInFrames;
+
+		if (elementEnd > currentDuration) {
+			// Add 30% padding for editing room (minimum 60 frames)
+			const padding = Math.max(60, Math.floor(element.durationInFrames * 0.3));
+			const newDuration = elementEnd + padding;
+
+			dispatch({
+				type: 'UPDATE_SCENE_SETTINGS',
+				settings: { durationInFrames: newDuration },
+			});
+		}
+
 		dispatch({ type: 'HISTORY_COMMIT' });
 	};
 

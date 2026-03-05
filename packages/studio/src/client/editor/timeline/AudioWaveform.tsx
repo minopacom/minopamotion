@@ -14,7 +14,7 @@ interface AudioWaveformProps {
  * Generates and displays an audio waveform visualization.
  * Extracts audio data using Web Audio API and renders as a waveform.
  */
-export function AudioWaveform({
+export const AudioWaveform = React.memo(function AudioWaveform({
 	src,
 	width,
 	height,
@@ -25,6 +25,11 @@ export function AudioWaveform({
 }: AudioWaveformProps) {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const [waveformData, setWaveformData] = useState<number[] | null>(null);
+
+	// Safety check: don't process if dimensions are too small
+	if (width < 10 || height < 5) {
+		return null;
+	}
 
 	useEffect(() => {
 		let cancelled = false;
@@ -57,9 +62,19 @@ export function AudioWaveform({
 				const endSample = Math.floor(endTime * sampleRate);
 				const totalSamples = endSample - startSample;
 
-				// Number of data points to generate (one per pixel)
-				const dataPoints = Math.min(width, totalSamples);
+				// Safety check: ensure we have valid samples
+				if (totalSamples <= 0 || !isFinite(totalSamples)) {
+					return;
+				}
+
+				// Number of data points to generate (reduced to 200 max for performance)
+				const dataPoints = Math.min(width, totalSamples, 200);
 				const samplesPerPoint = totalSamples / dataPoints;
+
+				// Safety check: ensure samplesPerPoint is valid
+				if (!isFinite(samplesPerPoint) || samplesPerPoint <= 0) {
+					return;
+				}
 
 				// Extract waveform data
 				const data: number[] = [];
@@ -132,4 +147,4 @@ export function AudioWaveform({
 			}}
 		/>
 	);
-}
+});

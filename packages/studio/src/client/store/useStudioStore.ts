@@ -21,10 +21,12 @@ export function createInitialState(
 		volume: 1,
 		playbackRate: 1,
 		previewZoom: 0,
+		canvasZoom: 1, // 1 = 100%
+		canvasZoomFitToScreen: true, // Start with fit-to-screen
 		showCheckerboard: false,
 		inPoint: null,
 		outPoint: null,
-		timelineZoom: 1,
+		timelineZoom: 2.0, // Start zoomed in to allow scrolling and see details (2x container width)
 		leftPanelWidth: 240,
 		rightPanelWidth: 300,
 		timelineHeight: 200,
@@ -33,6 +35,7 @@ export function createInitialState(
 		showQuickSwitcher: false,
 		showRenderDialog: false,
 		tracks: tracks ?? [],
+		snappingEnabled: true, // Enabled by default
 	};
 }
 

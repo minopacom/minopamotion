@@ -106,7 +106,7 @@ export function PlaybackControls({ playerRef }: PlaybackControlsProps) {
 			<button
 				style={loop ? activeBtnStyle : btnStyle}
 				onClick={() => dispatch({ type: 'TOGGLE_LOOP' })}
-				title="Toggle loop (L)"
+				title="Toggle loop (Shift+L)"
 			>
 				Loop
 			</button>

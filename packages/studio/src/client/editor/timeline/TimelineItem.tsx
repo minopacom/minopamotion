@@ -38,6 +38,10 @@ export function TimelineItem({
 	const showThumbnails =
 		(element.type === 'video' || element.type === 'image') && width > 40;
 
+	// Check if this element should show waveform
+	const showWaveform =
+		(element.type === 'audio' || element.type === 'video') && width > 40;
+
 	return (
 		<div
 			style={{
@@ -47,15 +51,19 @@ export function TimelineItem({
 				top: 2,
 				bottom: 2,
 				background: isSelected ? colors.selection : color,
-				borderRadius: 3,
+				borderRadius: 6,
 				overflow: 'hidden',
 				cursor: 'pointer',
 				border: isSelected
-					? `1px solid ${colors.textBright}`
-					: '1px solid transparent',
+					? `2px solid ${colors.textBright}`
+					: '1px solid rgba(255, 255, 255, 0.1)',
 				boxSizing: 'border-box',
 				display: 'flex',
 				alignItems: 'center',
+				boxShadow: isSelected
+					? '0 4px 12px rgba(74, 158, 255, 0.3)'
+					: '0 2px 6px rgba(0, 0, 0, 0.3)',
+				transition: 'box-shadow 0.15s ease, border 0.15s ease',
 			}}
 			onClick={onClick}
 		>
@@ -83,6 +91,30 @@ export function TimelineItem({
 				/>
 			)}
 
+			{/* Waveform for audio/video elements (positioned at bottom) */}
+			{showWaveform && (element.type === 'audio' || element.type === 'video') && (
+				<div
+					style={{
+						position: 'absolute',
+						bottom: 0,
+						left: 0,
+						right: 0,
+						height: element.type === 'video' ? 12 : 26, // Smaller for video (has thumbnails)
+						pointerEvents: 'none',
+					}}
+				>
+					<AudioWaveform
+						src={element.src}
+						width={width}
+						height={element.type === 'video' ? 12 : 26}
+						startFrom={element.startFrom}
+						durationInFrames={element.durationInFrames}
+						fps={fps}
+						color="rgba(255, 255, 255, 0.6)"
+					/>
+				</div>
+			)}
+
 			{/* Trim start handle */}
 			<div
 				style={{
@@ -104,6 +136,7 @@ export function TimelineItem({
 					inset: 0,
 					padding: '0 8px',
 					fontSize: 10,
+					fontWeight: 600,
 					color: colors.textBright,
 					overflow: 'hidden',
 					textOverflow: 'ellipsis',
@@ -112,14 +145,26 @@ export function TimelineItem({
 					userSelect: 'none',
 					display: 'flex',
 					alignItems: 'center',
+					gap: 4,
 					background: showThumbnails
-						? 'linear-gradient(to bottom, rgba(0,0,0,0.3), transparent)'
-						: 'transparent',
+						? 'linear-gradient(to bottom, rgba(0,0,0,0.5), transparent 50%)'
+						: 'rgba(0,0,0,0.2)',
 					zIndex: 5,
 					pointerEvents: 'none',
+					textShadow: '0 1px 2px rgba(0,0,0,0.8)',
 				}}
 			>
-				{element.name}
+				{/* Type icon */}
+				<span style={{ fontSize: 11, flexShrink: 0 }}>
+					{element.type === 'text' && '📝'}
+					{element.type === 'solid' && '▭'}
+					{element.type === 'image' && '🖼️'}
+					{element.type === 'video' && '🎬'}
+					{element.type === 'audio' && '🎵'}
+				</span>
+				<span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+					{element.name}
+				</span>
 			</div>
 
 			{/* Invisible drag target (sits above thumbnails) */}

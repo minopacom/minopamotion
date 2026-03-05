@@ -2,9 +2,11 @@ import React, { forwardRef, useMemo, useRef, useState, useEffect, useCallback } 
 import { Player } from '@minopamotion/player';
 import type { PlayerRef } from '@minopamotion/player';
 import type { TComposition } from '@minopamotion/core';
-import { useStudioState } from '../store/context.js';
+import { useStudioState, useStudioDispatch } from '../store/context.js';
 import { colors } from '../utils/colors.js';
 import { CanvasOverlay } from '../editor/canvas/CanvasOverlay.js';
+import { CanvasZoomControls } from '../editor/canvas/CanvasZoomControls.js';
+import { useCanvasZoomGestures } from '../hooks/useCanvasZoomGestures.js';
 
 interface PreviewProps {
 	composition: TComposition;
@@ -12,10 +14,18 @@ interface PreviewProps {
 
 export const Preview = forwardRef<PlayerRef, PreviewProps>(
 	function Preview({ composition }, ref) {
-		const { inputProps, previewZoom, showCheckerboard, loop, playbackRate, editorMode } =
+		const { inputProps, previewZoom, canvasZoom, canvasZoomFitToScreen, showCheckerboard, loop, playbackRate, editorMode, editorScene } =
 			useStudioState();
+		const dispatch = useStudioDispatch();
 		const containerRef = useRef<HTMLDivElement>(null);
 		const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+
+		// Enable canvas zoom gestures (Cmd+scroll) in editor mode
+		useCanvasZoomGestures({
+			enabled: editorMode,
+			containerRef,
+			dispatch,
+		});
 
 		useEffect(() => {
 			const el = containerRef.current;
@@ -47,10 +57,10 @@ export const Preview = forwardRef<PlayerRef, PreviewProps>(
 			[showCheckerboard],
 		);
 
-		const scale =
-			previewZoom === 0
-				? undefined
-				: previewZoom / 100;
+		// In editor mode, use canvasZoom; otherwise use previewZoom
+		const scale = editorMode
+			? (canvasZoomFitToScreen ? undefined : canvasZoom)
+			: (previewZoom === 0 ? undefined : previewZoom / 100);
 
 		const playerStyle: React.CSSProperties = useMemo(
 			() => ({
@@ -85,13 +95,18 @@ export const Preview = forwardRef<PlayerRef, PreviewProps>(
 
 		const overlayLayout = computeOverlayLayout();
 
+		// Use editor scene duration if in editor mode, otherwise use composition duration
+		const durationInFrames = editorMode
+			? editorScene.settings.durationInFrames
+			: composition.durationInFrames;
+
 		return (
 			<div ref={containerRef} style={containerStyle}>
 				<Player
 					ref={ref}
 					component={composition.component}
 					inputProps={inputProps}
-					durationInFrames={composition.durationInFrames}
+					durationInFrames={durationInFrames}
 					compositionWidth={composition.width}
 					compositionHeight={composition.height}
 					fps={composition.fps}
@@ -102,12 +117,15 @@ export const Preview = forwardRef<PlayerRef, PreviewProps>(
 					style={playerStyle}
 				/>
 				{editorMode && (
-					<CanvasOverlay
-						composition={composition}
-						scale={overlayLayout.actualScale}
-						offsetX={overlayLayout.offsetX}
-						offsetY={overlayLayout.offsetY}
-					/>
+					<>
+						<CanvasOverlay
+							composition={composition}
+							scale={overlayLayout.actualScale}
+							offsetX={overlayLayout.offsetX}
+							offsetY={overlayLayout.offsetY}
+						/>
+						<CanvasZoomControls />
+					</>
 				)}
 				{scale && (
 					<div

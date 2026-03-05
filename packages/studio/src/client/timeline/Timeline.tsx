@@ -12,6 +12,16 @@ interface TimelineProps {
 	playerRef: React.RefObject<PlayerRef | null>;
 }
 
+const btnStyle: React.CSSProperties = {
+	background: 'none',
+	border: 'none',
+	color: colors.text,
+	cursor: 'pointer',
+	fontSize: 14,
+	padding: '2px 6px',
+	borderRadius: 3,
+};
+
 export function Timeline({ playerRef }: TimelineProps) {
 	const state = useStudioState();
 	const dispatch = useStudioDispatch();
@@ -82,7 +92,14 @@ export function Timeline({ playerRef }: TimelineProps) {
 		);
 	}
 
-	const totalWidth = containerWidth * state.timelineZoom;
+	// Use editor scene duration if in editor mode, otherwise use composition duration
+	const durationInFrames = state.editorMode
+		? state.editorScene.settings.durationInFrames
+		: comp.durationInFrames;
+
+	// Total scrollable width - only the canvas area (not including track headers)
+	const TRACK_HEADER_WIDTH = 140;
+	const totalWidth = (containerWidth - TRACK_HEADER_WIDTH) * state.timelineZoom + TRACK_HEADER_WIDTH;
 
 	return (
 		<div
@@ -94,23 +111,115 @@ export function Timeline({ playerRef }: TimelineProps) {
 				borderTop: `1px solid ${colors.border}`,
 			}}
 		>
-			{/* Zoom controls */}
+			{/* Timeline header with playback controls */}
 			<div
 				style={{
 					display: 'flex',
 					alignItems: 'center',
 					gap: 8,
-					padding: '2px 8px',
+					padding: '4px 8px',
 					borderBottom: `1px solid ${colors.border}`,
 					fontSize: 11,
 					color: colors.textDim,
+					background: colors.bgPanel,
 				}}
 			>
-				<span>Timeline</span>
-				<div style={{ flex: 1 }} />
-				<span style={{ fontFamily: 'monospace' }}>
-					{state.currentFrame} / {comp.durationInFrames}
+				{/* Playback controls */}
+				<button
+					style={btnStyle}
+					onClick={() => {
+						if (state.playing) {
+							playerRef.current?.pause();
+						} else {
+							playerRef.current?.play();
+						}
+					}}
+					title="Play/Pause (Space)"
+				>
+					{state.playing ? '⏸' : '▶'}
+				</button>
+				<button
+					style={btnStyle}
+					onClick={() => {
+						dispatch({ type: 'STEP_FRAME', delta: -1 });
+						playerRef.current?.seekTo(state.currentFrame - 1);
+					}}
+					title="Step back (Left)"
+				>
+					{'◀'}
+				</button>
+				<button
+					style={btnStyle}
+					onClick={() => {
+						dispatch({ type: 'STEP_FRAME', delta: 1 });
+						playerRef.current?.seekTo(state.currentFrame + 1);
+					}}
+					title="Step forward (Right)"
+				>
+					{'▶'}
+				</button>
+
+				<div style={{ width: 1, height: 16, background: colors.border }} />
+
+				{/* Frame counter */}
+				<span style={{ fontFamily: 'monospace', fontSize: 11 }}>
+					{state.currentFrame} / {durationInFrames}
 				</span>
+
+				<div style={{ flex: 1 }} />
+
+				{/* Snapping toggle */}
+				<button
+					onClick={() => dispatch({ type: 'TOGGLE_SNAPPING' })}
+					style={{
+						...btnStyle,
+						background: state.snappingEnabled ? colors.accent : colors.bgInput,
+						color: state.snappingEnabled ? colors.textBright : colors.text,
+						fontWeight: state.snappingEnabled ? 600 : 400,
+						padding: '2px 8px',
+					}}
+					title="Toggle snapping (Shift+M)"
+				>
+					🧲 {state.snappingEnabled ? 'On' : 'Off'}
+				</button>
+
+				{/* Ripple Edit toggle */}
+				{state.editorMode && (
+					<button
+						onClick={() => dispatch({ type: 'TOGGLE_RIPPLE_EDIT' })}
+						style={{
+							...btnStyle,
+							background: state.rippleEditEnabled ? colors.accent : colors.bgInput,
+							color: state.rippleEditEnabled ? colors.textBright : colors.text,
+							fontWeight: state.rippleEditEnabled ? 600 : 400,
+							padding: '2px 8px',
+						}}
+						title="Toggle ripple edit (Shift+R) - Auto-close gaps when deleting"
+					>
+						⚡ Ripple {state.rippleEditEnabled ? 'On' : 'Off'}
+					</button>
+				)}
+
+				{/* Insert Mode toggle */}
+				{state.editorMode && (
+					<button
+						onClick={() => dispatch({ type: 'TOGGLE_INSERT_MODE' })}
+						style={{
+							...btnStyle,
+							background: state.insertMode ? colors.accent : colors.bgInput,
+							color: state.insertMode ? colors.textBright : colors.text,
+							fontWeight: state.insertMode ? 600 : 400,
+							padding: '2px 8px',
+						}}
+						title="Toggle insert mode (Shift+I) - Insert: push clips forward | Overwrite: replace clips"
+					>
+						{state.insertMode ? '➕ Insert' : '🔄 Overwrite'}
+					</button>
+				)}
+
+				<div style={{ width: 1, height: 16, background: colors.border }} />
+
+				{/* Zoom controls */}
 				<button
 					onClick={() =>
 						dispatch({
@@ -118,18 +227,12 @@ export function Timeline({ playerRef }: TimelineProps) {
 							zoom: Math.max(0.1, state.timelineZoom - 0.25),
 						})
 					}
-					style={{
-						background: 'none',
-						border: 'none',
-						color: colors.textDim,
-						cursor: 'pointer',
-						fontSize: 14,
-						padding: '0 4px',
-					}}
+					style={btnStyle}
+					title="Zoom out"
 				>
 					-
 				</button>
-				<span style={{ fontFamily: 'monospace', minWidth: 36, textAlign: 'center' }}>
+				<span style={{ fontFamily: 'monospace', minWidth: 36, textAlign: 'center', fontSize: 11 }}>
 					{Math.round(state.timelineZoom * 100)}%
 				</span>
 				<button
@@ -139,46 +242,42 @@ export function Timeline({ playerRef }: TimelineProps) {
 							zoom: Math.min(10, state.timelineZoom + 0.25),
 						})
 					}
-					style={{
-						background: 'none',
-						border: 'none',
-						color: colors.textDim,
-						cursor: 'pointer',
-						fontSize: 14,
-						padding: '0 4px',
-					}}
+					style={btnStyle}
+					title="Zoom in"
 				>
 					+
 				</button>
 			</div>
 
-			{/* Scrollable area */}
-			<div
-				ref={containerRef}
-				onScroll={handleScroll}
-				onWheel={handleWheel}
-				style={{
-					flex: 1,
-					overflow: 'auto',
-					position: 'relative',
-				}}
-			>
-				<div style={{ width: totalWidth, minHeight: '100%', position: 'relative' }}>
-					{/* Ruler */}
-					<Ruler
-						durationInFrames={comp.durationInFrames}
-						fps={comp.fps}
-						zoom={state.timelineZoom}
-						scrollLeft={scrollLeft}
-						width={containerWidth}
-						onSeek={handleSeek}
-					/>
+			{/* Timeline area wrapper with relative positioning for playhead */}
+			<div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
+				{/* Ruler - fixed, not scrollable */}
+				<Ruler
+					durationInFrames={durationInFrames}
+					fps={comp.fps}
+					zoom={state.timelineZoom}
+					scrollLeft={scrollLeft}
+					width={containerWidth}
+					onSeek={handleSeek}
+				/>
 
-					{/* Tracks + markers */}
-					<div style={{ position: 'relative' }}>
+				{/* Scrollable area */}
+				<div
+					ref={containerRef}
+					onScroll={handleScroll}
+					onWheel={handleWheel}
+					style={{
+						height: 'calc(100% - 24px)', // Subtract ruler height
+						overflow: 'auto',
+						position: 'relative',
+					}}
+				>
+					<div style={{ width: totalWidth, minHeight: '100%', position: 'relative' }}>
+						{/* Tracks + markers */}
+						<div style={{ position: 'relative' }}>
 						{state.editorMode ? (
 							<EditorTrackArea
-								durationInFrames={comp.durationInFrames}
+								durationInFrames={durationInFrames}
 								zoom={state.timelineZoom}
 								width={containerWidth}
 								fps={comp.fps}
@@ -186,7 +285,7 @@ export function Timeline({ playerRef }: TimelineProps) {
 						) : (
 							<TrackArea
 								tracks={state.tracks}
-								durationInFrames={comp.durationInFrames}
+								durationInFrames={durationInFrames}
 								zoom={state.timelineZoom}
 								scrollLeft={scrollLeft}
 								width={containerWidth}
@@ -195,7 +294,7 @@ export function Timeline({ playerRef }: TimelineProps) {
 						<InOutMarkers
 							inPoint={state.inPoint}
 							outPoint={state.outPoint}
-							durationInFrames={comp.durationInFrames}
+							durationInFrames={durationInFrames}
 							zoom={state.timelineZoom}
 							scrollLeft={scrollLeft}
 							width={containerWidth}
@@ -209,24 +308,6 @@ export function Timeline({ playerRef }: TimelineProps) {
 						/>
 					</div>
 
-					{/* Playhead */}
-					<Playhead
-						currentFrame={state.currentFrame}
-						durationInFrames={comp.durationInFrames}
-						zoom={state.timelineZoom}
-						scrollLeft={scrollLeft}
-						width={containerWidth}
-						height={
-							24 +
-							(state.editorMode
-								? state.editorScene.tracks.length
-								: state.tracks.length) *
-								30 +
-							8
-						}
-						onSeek={handleSeek}
-					/>
-
 					{/* Click-to-seek on empty area */}
 					{state.tracks.length === 0 && (
 						<div
@@ -235,14 +316,16 @@ export function Timeline({ playerRef }: TimelineProps) {
 									e.currentTarget as HTMLDivElement
 								).getBoundingClientRect();
 								const x = e.clientX - rect.left + scrollLeft;
+								const TRACK_HEADER_WIDTH = 140;
+								const canvasWidth = containerWidth - TRACK_HEADER_WIDTH;
 								const pxPerFrame =
-									(containerWidth * state.timelineZoom) /
-									comp.durationInFrames;
+									(canvasWidth * state.timelineZoom) /
+									durationInFrames;
 								handleSeek(
 									Math.max(
 										0,
 										Math.min(
-											comp.durationInFrames - 1,
+											durationInFrames - 1,
 											Math.round(x / pxPerFrame),
 										),
 									),
@@ -256,6 +339,25 @@ export function Timeline({ playerRef }: TimelineProps) {
 					)}
 				</div>
 			</div>
+
+			{/* Playhead - positioned absolutely over everything */}
+			<Playhead
+				currentFrame={state.currentFrame}
+				durationInFrames={durationInFrames}
+				zoom={state.timelineZoom}
+				scrollLeft={scrollLeft}
+				width={containerWidth}
+				height={
+					24 +
+					(state.editorMode
+						? state.editorScene.tracks.length
+						: state.tracks.length) *
+						30 +
+					8
+				}
+				onSeek={handleSeek}
+			/>
 		</div>
+	</div>
 	);
 }

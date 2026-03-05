@@ -19,6 +19,7 @@ import { EditorComposition } from './editor/EditorComposition.js';
 import { AssetLibrary } from './editor/panels/AssetLibrary.js';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts.js';
 import { useDragHandle } from './hooks/useDragHandle.js';
+import { ResizeHandle } from './components/ResizeHandle.js';
 import { colors } from './utils/colors.js';
 
 export interface StudioProps {
@@ -83,7 +84,26 @@ export function Studio({ compositions, tracks }: StudioProps) {
 		playing: state.playing,
 		editorMode: state.editorMode,
 		selectedElementIds: state.selectedElementIds,
+		durationInFrames: activeComp?.durationInFrames || 0,
 	});
+
+	// Use refs to track current values without causing re-renders
+	const leftPanelWidthRef = useRef(state.leftPanelWidth);
+	const rightPanelWidthRef = useRef(state.rightPanelWidth);
+	const timelineHeightRef = useRef(state.timelineHeight);
+
+	// Update refs when state changes
+	useEffect(() => {
+		leftPanelWidthRef.current = state.leftPanelWidth;
+	}, [state.leftPanelWidth]);
+
+	useEffect(() => {
+		rightPanelWidthRef.current = state.rightPanelWidth;
+	}, [state.rightPanelWidth]);
+
+	useEffect(() => {
+		timelineHeightRef.current = state.timelineHeight;
+	}, [state.timelineHeight]);
 
 	// Panel resize handlers
 	const leftDrag = useDragHandle({
@@ -92,9 +112,9 @@ export function Studio({ compositions, tracks }: StudioProps) {
 			(delta: number) =>
 				dispatch({
 					type: 'SET_LEFT_PANEL_WIDTH',
-					width: state.leftPanelWidth + delta,
+					width: leftPanelWidthRef.current + delta,
 				}),
-			[dispatch, state.leftPanelWidth],
+			[dispatch],
 		),
 	});
 
@@ -104,9 +124,9 @@ export function Studio({ compositions, tracks }: StudioProps) {
 			(delta: number) =>
 				dispatch({
 					type: 'SET_RIGHT_PANEL_WIDTH',
-					width: state.rightPanelWidth - delta,
+					width: rightPanelWidthRef.current - delta,
 				}),
-			[dispatch, state.rightPanelWidth],
+			[dispatch],
 		),
 	});
 
@@ -116,9 +136,9 @@ export function Studio({ compositions, tracks }: StudioProps) {
 			(delta: number) =>
 				dispatch({
 					type: 'SET_TIMELINE_HEIGHT',
-					height: state.timelineHeight - delta,
+					height: timelineHeightRef.current - delta,
 				}),
-			[dispatch, state.timelineHeight],
+			[dispatch],
 		),
 	});
 
@@ -164,15 +184,7 @@ export function Studio({ compositions, tracks }: StudioProps) {
 						</div>
 
 						{/* Left resize handle */}
-						<div
-							{...leftDrag}
-							style={{
-								width: 4,
-								cursor: 'col-resize',
-								background: colors.border,
-								flexShrink: 0,
-							}}
-						/>
+						<ResizeHandle direction="horizontal" {...leftDrag} />
 
 						{/* Preview */}
 						<div
@@ -203,15 +215,7 @@ export function Studio({ compositions, tracks }: StudioProps) {
 						</div>
 
 						{/* Right resize handle */}
-						<div
-							{...rightDrag}
-							style={{
-								width: 4,
-								cursor: 'col-resize',
-								background: colors.border,
-								flexShrink: 0,
-							}}
-						/>
+						<ResizeHandle direction="horizontal" {...rightDrag} />
 
 						{/* Right panel */}
 						<div
@@ -226,15 +230,7 @@ export function Studio({ compositions, tracks }: StudioProps) {
 					</div>
 
 					{/* Timeline resize handle */}
-					<div
-						{...timelineDrag}
-						style={{
-							height: 4,
-							cursor: 'row-resize',
-							background: colors.border,
-							flexShrink: 0,
-						}}
-					/>
+					<ResizeHandle direction="vertical" {...timelineDrag} />
 
 					{/* Timeline */}
 					<div

@@ -16,7 +16,7 @@ interface ThumbnailStripProps {
  * For videos: generates multiple thumbnails at intervals
  * For images: repeats the same image
  */
-export function ThumbnailStrip({
+export const ThumbnailStrip = React.memo(function ThumbnailStrip({
 	src,
 	type,
 	durationInFrames,
@@ -25,9 +25,16 @@ export function ThumbnailStrip({
 	width,
 	height,
 }: ThumbnailStripProps) {
+	// Safety check: don't render if width is too small (prevents crashes)
+	if (width < 10 || height < 10) {
+		return null;
+	}
+
 	// Calculate how many thumbnails we can fit
-	const THUMBNAIL_WIDTH = 60; // px per thumbnail
-	const thumbnailCount = Math.max(1, Math.floor(width / THUMBNAIL_WIDTH));
+	// Reduced to max 20 thumbnails to improve performance
+	const THUMBNAIL_WIDTH = 80; // px per thumbnail (increased from 60)
+	const maxThumbnails = 20; // Limit to prevent performance issues
+	const thumbnailCount = Math.max(1, Math.min(maxThumbnails, Math.floor(width / THUMBNAIL_WIDTH)));
 
 	if (type === 'image') {
 		// For images, just repeat the same image
@@ -101,4 +108,4 @@ export function ThumbnailStrip({
 			))}
 		</div>
 	);
-}
+});

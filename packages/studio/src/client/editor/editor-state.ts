@@ -31,9 +31,12 @@ export type EditorAction =
 			id: string;
 			from: number;
 			durationInFrames: number;
+			trackId?: string;
 	  }
 	| { type: 'SELECT_ELEMENTS'; ids: string[]; append?: boolean }
+	| { type: 'SELECT_ALL_ELEMENTS' }
 	| { type: 'DESELECT_ALL' }
+	| { type: 'DUPLICATE_ELEMENTS' }
 	| { type: 'ADD_EDITOR_TRACK'; track: EditorTrack }
 	| { type: 'REMOVE_EDITOR_TRACK'; trackId: string }
 	| { type: 'RENAME_EDITOR_TRACK'; trackId: string; name: string }
@@ -63,7 +66,7 @@ export function createInitialEditorState(): EditorState {
 				width: 1920,
 				height: 1080,
 				fps: 30,
-				durationInFrames: 300,
+				durationInFrames: 900, // 30 seconds at 30fps (was 10 seconds)
 			},
 			elements: [],
 			tracks: [],
@@ -92,7 +95,9 @@ export function isEditorAction(action: { type: string }): action is EditorAction
 		'RESIZE_ELEMENT',
 		'REORDER_ELEMENT',
 		'SELECT_ELEMENTS',
+		'SELECT_ALL_ELEMENTS',
 		'DESELECT_ALL',
+		'DUPLICATE_ELEMENTS',
 		'ADD_EDITOR_TRACK',
 		'REMOVE_EDITOR_TRACK',
 		'RENAME_EDITOR_TRACK',
@@ -178,13 +183,52 @@ export function editorReducer(
 
 		case 'REMOVE_ELEMENTS': {
 			const idsToRemove = new Set(action.ids);
+			let elements = state.editorScene.elements.filter(
+				(el) => !idsToRemove.has(el.id),
+			);
+
+			// Ripple edit: Close gaps by shifting elements after the deleted ones
+			if ('rippleEditEnabled' in state && state.rippleEditEnabled) {
+				// Group removed elements by track
+				const removedByTrack = new Map<string, Array<{ from: number; to: number }>>();
+				state.editorScene.elements.forEach((el) => {
+					if (idsToRemove.has(el.id)) {
+						const gaps = removedByTrack.get(el.trackId) || [];
+						gaps.push({ from: el.from, to: el.from + el.durationInFrames });
+						removedByTrack.set(el.trackId, gaps);
+					}
+				});
+
+				// For each track, shift elements after removed ones
+				removedByTrack.forEach((gaps, trackId) => {
+					// Sort gaps by start frame
+					gaps.sort((a, b) => a.from - b.from);
+
+					// For each element on this track, calculate how much to shift it
+					elements = elements.map((el) => {
+						if (el.trackId !== trackId) return el;
+
+						// Sum up all gap durations that are before this element
+						const shift = gaps.reduce((total, gap) => {
+							if (gap.to <= el.from) {
+								return total + (gap.to - gap.from);
+							}
+							return total;
+						}, 0);
+
+						if (shift > 0) {
+							return { ...el, from: Math.max(0, el.from - shift) };
+						}
+						return el;
+					});
+				});
+			}
+
 			return {
 				...state,
 				editorScene: {
 					...state.editorScene,
-					elements: state.editorScene.elements.filter(
-						(el) => !idsToRemove.has(el.id),
-					),
+					elements,
 				},
 				selectedElementIds: state.selectedElementIds.filter(
 					(id) => !idsToRemove.has(id),
@@ -231,22 +275,57 @@ export function editorReducer(
 				},
 			};
 
-		case 'REORDER_ELEMENT':
+		case 'REORDER_ELEMENT': {
+			const element = state.editorScene.elements.find((el) => el.id === action.id);
+			if (!element) return state;
+
+			// Check if we should use insert mode (push clips forward)
+			const useInsertMode = 'insertMode' in state && state.insertMode;
+			const targetTrackId = action.trackId ?? element.trackId;
+			const isChangingTrack = targetTrackId !== element.trackId;
+			const isMovingForward = action.from > element.from;
+
+			let elements = updateElement(
+				state.editorScene.elements,
+				action.id,
+				(el) => ({
+					...el,
+					from: Math.max(0, action.from),
+					durationInFrames: Math.max(1, action.durationInFrames),
+				...(action.trackId ? { trackId: action.trackId } : {}),
+				}),
+			);
+
+			// Insert mode: Push overlapping clips forward
+			if (useInsertMode && (isChangingTrack || !isMovingForward)) {
+				const movedElement = elements.find((el) => el.id === action.id)!;
+				const insertStart = movedElement.from;
+				const insertEnd = movedElement.from + movedElement.durationInFrames;
+
+				elements = elements.map((el) => {
+					// Don't shift the element being moved
+					if (el.id === action.id) return el;
+					// Only shift elements on the same track
+					if (el.trackId !== targetTrackId) return el;
+
+					// If element overlaps with insert range, push it forward
+					const elEnd = el.from + el.durationInFrames;
+					if (el.from < insertEnd && elEnd > insertStart) {
+						// Push element to after the inserted element
+						return { ...el, from: insertEnd };
+					}
+					return el;
+				});
+			}
+
 			return {
 				...state,
 				editorScene: {
 					...state.editorScene,
-					elements: updateElement(
-						state.editorScene.elements,
-						action.id,
-						(el) => ({
-							...el,
-							from: Math.max(0, action.from),
-							durationInFrames: Math.max(1, action.durationInFrames),
-						}),
-					),
+					elements,
 				},
 			};
+		}
 
 		case 'SELECT_ELEMENTS': {
 			if (action.append) {
@@ -262,8 +341,42 @@ export function editorReducer(
 			return { ...state, selectedElementIds: action.ids };
 		}
 
+		case 'SELECT_ALL_ELEMENTS':
+			return {
+				...state,
+				selectedElementIds: state.editorScene.elements.map((el) => el.id),
+			};
+
 		case 'DESELECT_ALL':
 			return { ...state, selectedElementIds: [] };
+
+		case 'DUPLICATE_ELEMENTS': {
+			const selectedElements = state.editorScene.elements.filter((el) =>
+				state.selectedElementIds.includes(el.id),
+			);
+			const duplicatedElements = selectedElements.map((el) => {
+				const id = `el-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+				return {
+					...el,
+					id,
+					name: `${el.name} (Copy)`,
+					from: el.from + 30, // Offset by 30 frames
+					transform: {
+						...el.transform,
+						x: el.transform.x + 20, // Offset by 20px
+						y: el.transform.y + 20,
+					},
+				};
+			});
+			return {
+				...state,
+				editorScene: {
+					...state.editorScene,
+					elements: [...state.editorScene.elements, ...duplicatedElements],
+				},
+				selectedElementIds: duplicatedElements.map((el) => el.id),
+			};
+		}
 
 		case 'ADD_EDITOR_TRACK':
 			return {

@@ -9,6 +9,7 @@ interface UseKeyboardShortcutsOptions {
 	playing: boolean;
 	editorMode?: boolean;
 	selectedElementIds?: string[];
+	durationInFrames: number;
 }
 
 export function useKeyboardShortcuts({
@@ -18,6 +19,7 @@ export function useKeyboardShortcuts({
 	playing,
 	editorMode = false,
 	selectedElementIds = [],
+	durationInFrames,
 }: UseKeyboardShortcutsOptions) {
 	useEffect(() => {
 		const handler = (e: KeyboardEvent) => {
@@ -43,6 +45,19 @@ export function useKeyboardShortcuts({
 				if (e.key === 'z' && isMeta) {
 					e.preventDefault();
 					dispatch({ type: 'HISTORY_UNDO' });
+					return;
+				}
+				// Select All: Cmd/Ctrl+A
+				if (e.key === 'a' && isMeta) {
+					e.preventDefault();
+					dispatch({ type: 'SELECT_ALL_ELEMENTS' });
+					return;
+				}
+				// Duplicate: Cmd/Ctrl+D
+				if (e.key === 'd' && isMeta && selectedElementIds.length > 0) {
+					e.preventDefault();
+					dispatch({ type: 'DUPLICATE_ELEMENTS' });
+					dispatch({ type: 'HISTORY_COMMIT' });
 					return;
 				}
 				if (
@@ -101,6 +116,45 @@ export function useKeyboardShortcuts({
 				}
 			}
 
+			// J-K-L Shuttle Controls (Professional Video Editor Standard)
+			// J = Play backwards, K = Pause, L = Play forwards
+			// Hold J/L for faster playback (2x, 4x, 8x)
+			if (e.key === 'j' && !isMeta) {
+				e.preventDefault();
+				// J: Play backwards (or step back if at normal speed)
+				if (playing) {
+					playerRef.current?.pause();
+				}
+				// Step backwards
+				const stepAmount = e.shiftKey ? 10 : 1;
+				dispatch({ type: 'STEP_FRAME', delta: -stepAmount });
+				playerRef.current?.seekTo(currentFrame - stepAmount);
+				return;
+			}
+
+			if (e.key === 'k' && !isMeta) {
+				e.preventDefault();
+				// K: Pause/Stop
+				if (playing) {
+					playerRef.current?.pause();
+				}
+				return;
+			}
+
+			if (e.key === 'l' && !isMeta && !editorMode) {
+				e.preventDefault();
+				// L: Play forward (or step forward if already playing)
+				if (!playing) {
+					playerRef.current?.play();
+				} else {
+					// Step forward while playing
+					const stepAmount = e.shiftKey ? 10 : 1;
+					dispatch({ type: 'STEP_FRAME', delta: stepAmount });
+					playerRef.current?.seekTo(currentFrame + stepAmount);
+				}
+				return;
+			}
+
 			switch (e.key) {
 				case ' ':
 					e.preventDefault();
@@ -150,20 +204,64 @@ export function useKeyboardShortcuts({
 					dispatch({ type: 'GO_TO_END' });
 					break;
 
-				case 'l':
-					if (!isMeta) {
+				// Note: 'l' is handled above for J-K-L shuttle controls
+				// Loop toggle moved to Shift+L to avoid conflict
+				case 'L':
+					if (e.shiftKey && !isMeta) {
+						e.preventDefault();
 						dispatch({ type: 'TOGGLE_LOOP' });
 					}
 					break;
 
+				case 'PageUp':
+					// Jump to previous edit point (element start/end)
+					e.preventDefault();
+					if (editorMode) {
+						// TODO: Implement jump to previous edit point
+						// For now, jump back 30 frames
+						dispatch({ type: 'STEP_FRAME', delta: -30 });
+						playerRef.current?.seekTo(currentFrame - 30);
+					}
+					break;
+
+				case 'PageDown':
+					// Jump to next edit point (element start/end)
+					e.preventDefault();
+					if (editorMode) {
+						// TODO: Implement jump to next edit point
+						// For now, jump forward 30 frames
+						dispatch({ type: 'STEP_FRAME', delta: 30 });
+						playerRef.current?.seekTo(currentFrame + 30);
+					}
+					break;
+
 				case 'm':
-					if (!isMeta) {
+				case 'M':
+					if (e.shiftKey) {
+						// Shift+M: Toggle snapping
+						e.preventDefault();
+						dispatch({ type: 'TOGGLE_SNAPPING' });
+					} else if (!isMeta) {
 						dispatch({ type: 'TOGGLE_MUTE' });
 					}
 					break;
 
+				case 'r':
+				case 'R':
+					if (e.shiftKey && !isMeta && editorMode) {
+						// Shift+R: Toggle ripple edit mode
+						e.preventDefault();
+						dispatch({ type: 'TOGGLE_RIPPLE_EDIT' });
+					}
+					break;
+
 				case 'i':
-					if (!isMeta) {
+				case 'I':
+					if (e.shiftKey && !isMeta && editorMode) {
+						// Shift+I: Toggle insert mode
+						e.preventDefault();
+						dispatch({ type: 'TOGGLE_INSERT_MODE' });
+					} else if (!isMeta && !e.shiftKey) {
 						dispatch({
 							type: 'SET_IN_POINT',
 							frame: currentFrame,
@@ -183,6 +281,29 @@ export function useKeyboardShortcuts({
 				case 'x':
 					if (!isMeta) {
 						dispatch({ type: 'CLEAR_IN_OUT' });
+					}
+					break;
+
+				case '+':
+				case '=':
+					if (editorMode) {
+						e.preventDefault();
+						dispatch({ type: 'CANVAS_ZOOM_IN' });
+					}
+					break;
+
+				case '-':
+				case '_':
+					if (editorMode) {
+						e.preventDefault();
+						dispatch({ type: 'CANVAS_ZOOM_OUT' });
+					}
+					break;
+
+				case '0':
+					if (editorMode && !isMeta) {
+						e.preventDefault();
+						dispatch({ type: 'CANVAS_ZOOM_RESET' });
 					}
 					break;
 
@@ -207,5 +328,5 @@ export function useKeyboardShortcuts({
 
 		document.addEventListener('keydown', handler);
 		return () => document.removeEventListener('keydown', handler);
-	}, [dispatch, playerRef, currentFrame, playing, editorMode, selectedElementIds]);
+	}, [dispatch, playerRef, currentFrame, playing, editorMode, selectedElementIds, durationInFrames]);
 }

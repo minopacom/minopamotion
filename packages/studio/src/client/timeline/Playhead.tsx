@@ -13,6 +13,7 @@ interface PlayheadProps {
 
 const HANDLE_WIDTH = 12;
 const HANDLE_HEIGHT = 14;
+const TRACK_HEADER_WIDTH = 140; // Width of the track header on the left
 
 export function Playhead({
 	currentFrame,
@@ -25,12 +26,15 @@ export function Playhead({
 }: PlayheadProps) {
 	const dragging = useRef(false);
 
-	const pxPerFrame = (width * zoom) / durationInFrames;
-	const x = currentFrame * pxPerFrame - scrollLeft;
+	// Canvas width should exclude track header width
+	const canvasWidth = width - TRACK_HEADER_WIDTH;
+	const totalCanvasWidth = canvasWidth * zoom;
+	const pxPerFrame = totalCanvasWidth / durationInFrames;
+	const x = TRACK_HEADER_WIDTH + currentFrame * pxPerFrame - scrollLeft;
 
 	const frameFromClientX = useCallback(
 		(clientX: number, containerLeft: number) => {
-			const relX = clientX - containerLeft + scrollLeft;
+			const relX = clientX - containerLeft - TRACK_HEADER_WIDTH + scrollLeft;
 			const frame = Math.round(relX / pxPerFrame);
 			return Math.max(0, Math.min(durationInFrames - 1, frame));
 		},
@@ -63,10 +67,21 @@ export function Playhead({
 		[frameFromClientX, onSeek],
 	);
 
-	if (x < -HANDLE_WIDTH || x > width + HANDLE_WIDTH) return null;
+	// Check if playhead is visible (account for track header offset)
+	if (x < TRACK_HEADER_WIDTH - HANDLE_WIDTH || x > width + HANDLE_WIDTH) return null;
 
 	return (
-		<>
+		<div
+			style={{
+				position: 'absolute',
+				top: 0,
+				left: 0,
+				right: 0,
+				bottom: 0,
+				pointerEvents: 'none',
+				zIndex: 100,
+			}}
+		>
 			{/* Vertical line */}
 			<div
 				style={{
@@ -78,7 +93,6 @@ export function Playhead({
 					background: colors.playhead,
 					boxShadow: `0 0 4px ${colors.playheadGlow}`,
 					pointerEvents: 'none',
-					zIndex: 10,
 				}}
 			/>
 			{/* Handle triangle */}
@@ -91,7 +105,7 @@ export function Playhead({
 					width: HANDLE_WIDTH,
 					height: HANDLE_HEIGHT,
 					cursor: 'ew-resize',
-					zIndex: 11,
+					pointerEvents: 'auto',
 					display: 'flex',
 					justifyContent: 'center',
 				}}
@@ -106,6 +120,6 @@ export function Playhead({
 					}}
 				/>
 			</div>
-		</>
+		</div>
 	);
 }
