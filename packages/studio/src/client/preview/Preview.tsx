@@ -83,7 +83,10 @@ export const Preview = forwardRef<PlayerRef, PreviewProps>(
 			}
 			const cw = containerSize.width;
 			const ch = containerSize.height;
-			const actualScale = scale ?? Math.min(cw / composition.width, ch / composition.height);
+			// Add 30% padding when fit-to-screen to leave plenty of breathing room
+			// This ensures canvas is clearly visible with checkerboard around it
+			const paddingFactor = scale === undefined ? 0.7 : 1.0;
+			const actualScale = scale ?? (Math.min(cw / composition.width, ch / composition.height) * paddingFactor);
 			const scaledW = composition.width * actualScale;
 			const scaledH = composition.height * actualScale;
 			return {
@@ -115,6 +118,7 @@ export const Preview = forwardRef<PlayerRef, PreviewProps>(
 					controls={false}
 					clickToPlay={false}
 					style={playerStyle}
+				className="player-container"
 				/>
 				{editorMode && (
 					<>

@@ -24,7 +24,7 @@ export function VideoRenderer({ element, fps }: VideoRendererProps) {
 		// Calculate current time based on frame and startFrom
 		const currentTime = (frame + element.startFrom) / fps;
 
-		// Seek video to current frame
+		// Seek video to current frame (with larger threshold to reduce seeking)
 		if (Math.abs(video.currentTime - currentTime) > 0.1) {
 			video.currentTime = currentTime;
 		}

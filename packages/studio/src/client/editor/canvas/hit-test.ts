@@ -3,11 +3,13 @@ import type { Transform } from '../types.js';
 /**
  * Test if a point (px, py) is inside a rotated rectangle defined by a Transform.
  * Translate point relative to rect center, rotate by -rotation, check axis-aligned bounds.
+ * Includes a tolerance/padding to make selection easier.
  */
 export function pointInRotatedRect(
 	px: number,
 	py: number,
 	transform: Transform,
+	tolerance: number = 30, // Add 30px padding around elements for easier selection
 ): boolean {
 	const cx = transform.x + transform.width / 2;
 	const cy = transform.y + transform.height / 2;
@@ -23,8 +25,8 @@ export function pointInRotatedRect(
 	const rx = dx * cos - dy * sin;
 	const ry = dx * sin + dy * cos;
 
-	// Check axis-aligned bounds
-	const hw = transform.width / 2;
-	const hh = transform.height / 2;
+	// Check axis-aligned bounds with tolerance for easier clicking
+	const hw = transform.width / 2 + tolerance;
+	const hh = transform.height / 2 + tolerance;
 	return Math.abs(rx) <= hw && Math.abs(ry) <= hh;
 }

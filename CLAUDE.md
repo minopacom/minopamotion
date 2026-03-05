@@ -50,11 +50,46 @@ Embeddable React player component. Depends on `@minopamotion/core`.
 
 **PlayerRef** (imperative API via `forwardRef`): `play()`, `pause()`, `toggle()`, `seekTo(frame)`, `getCurrentFrame()`, `isPlaying()`, volume/mute/playbackRate controls, typed `addEventListener()`.
 
+### @minopamotion/studio
+
+Video editor studio for creating and editing compositions. Built on top of `@minopamotion/player` and `@minopamotion/core`.
+
+**Architecture:**
+- Redux-style state management with `useStudioStore` and reducer pattern
+- Multi-track timeline with drag-and-drop element positioning
+- Real-time preview using `@minopamotion/player`
+- Asset library for media uploads (images, videos, audio)
+
+**Transitions System:**
+- **Element-level transitions** — Fade in/out effects on individual elements
+  - Configurable via `TransitionControls` component in inspector panel
+  - Applied in `ElementRenderer` using `calculateTransitionStyles()`
+  - Types: fade, slide, scale, zoom, rotate, wipe (left/right)
+  - Each element has `transitions: { in: Transition | null, out: Transition | null }`
+
+- **Timeline-level transitions** — Effects between clips on timeline
+  - Draggable from AssetLibrary "Transitions" tab onto timeline
+  - Stored in `editorScene.timelineTransitions: TimelineTransitionItem[]`
+  - Applied in `ElementRenderer` using `calculateTimelineTransitionEffect()`
+  - 10 effect types: crossfade, dissolve, wipe (left/right/up/down), slide (left/right), zoom (in/out)
+  - Support cross-track blending via optional `beforeElementId`/`afterElementId`
+  - Visual representation: purple gradient bars on timeline with drag handles
+  - Resizable and moveable via `useTransitionDrag` hook
+
+**Key files:**
+- `editor-state.ts` — State management, actions, reducer
+- `EditorComposition.tsx` — Renders elements with transitions applied
+- `ElementRenderer.tsx` — Applies element + timeline transitions during render
+- `transitions/apply-transition.ts` — Element-level transition logic
+- `transitions/apply-timeline-transition.ts` — Timeline-level transition logic
+- `timeline/TimelineTransitionItem.tsx` — Visual transition component on timeline
+- `panels/AssetLibrary.tsx` — Tabbed UI for media and transitions
+
 ### Dependency flow
 
 ```
-apps/example → @minopamotion/player → @minopamotion/core
-                                       ↑ uses /internals export
+apps/example → @minopamotion/studio → @minopamotion/player → @minopamotion/core
+                                                               ↑ uses /internals export
 ```
 
 ## Key Conventions

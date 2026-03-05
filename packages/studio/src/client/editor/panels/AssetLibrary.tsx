@@ -188,27 +188,29 @@ export function AssetLibrary() {
 			{/* Header with tabs */}
 			<div
 				style={{
-					padding: 8,
+					padding: 12,
 					borderBottom: `1px solid ${colors.border}`,
 					display: 'flex',
 					alignItems: 'center',
 					justifyContent: 'space-between',
+					gap: 8,
 				}}
 			>
-				<div style={{ display: 'flex', gap: 4 }}>
+				<div style={{ display: 'flex', gap: 4, background: colors.bgInput, borderRadius: 8, padding: 3 }}>
 					<button
 						onClick={() => setActiveTab('media')}
 						style={{
-							background: activeTab === 'media' ? colors.accent : 'transparent',
+							background: activeTab === 'media' ? colors.glass : 'transparent',
 							color: activeTab === 'media' ? colors.textBright : colors.textDim,
-							border: 'none',
-							borderRadius: 3,
-							padding: '4px 8px',
-							fontSize: 10,
+							border: activeTab === 'media' ? `1px solid ${colors.glassBorder}` : '1px solid transparent',
+							borderRadius: 6,
+							padding: '6px 12px',
+							fontSize: 11,
 							cursor: 'pointer',
 							fontWeight: 600,
 							textTransform: 'uppercase',
 							letterSpacing: 0.5,
+							transition: 'all 0.2s ease',
 						}}
 					>
 						Media
@@ -216,16 +218,17 @@ export function AssetLibrary() {
 					<button
 						onClick={() => setActiveTab('transitions')}
 						style={{
-							background: activeTab === 'transitions' ? colors.accent : 'transparent',
+							background: activeTab === 'transitions' ? colors.glass : 'transparent',
 							color: activeTab === 'transitions' ? colors.textBright : colors.textDim,
-							border: 'none',
-							borderRadius: 3,
-							padding: '4px 8px',
-							fontSize: 10,
+							border: activeTab === 'transitions' ? `1px solid ${colors.glassBorder}` : '1px solid transparent',
+							borderRadius: 6,
+							padding: '6px 12px',
+							fontSize: 11,
 							cursor: 'pointer',
 							fontWeight: 600,
 							textTransform: 'uppercase',
 							letterSpacing: 0.5,
+							transition: 'all 0.2s ease',
 						}}
 					>
 						Transitions
@@ -235,14 +238,24 @@ export function AssetLibrary() {
 					<button
 						onClick={() => fileInputRef.current?.click()}
 						style={{
-							background: colors.accent,
+							background: colors.accentGradient,
 							color: colors.textBright,
 							border: 'none',
-							borderRadius: 3,
-							padding: '3px 8px',
-							fontSize: 10,
+							borderRadius: 6,
+							padding: '6px 12px',
+							fontSize: 11,
 							cursor: 'pointer',
 							fontWeight: 600,
+							boxShadow: `0 2px 6px rgba(99, 102, 241, 0.25)`,
+							transition: 'all 0.2s ease',
+						}}
+						onMouseEnter={(e) => {
+							e.currentTarget.style.transform = 'translateY(-1px)';
+							e.currentTarget.style.boxShadow = `0 4px 10px rgba(99, 102, 241, 0.35)`;
+						}}
+						onMouseLeave={(e) => {
+							e.currentTarget.style.transform = 'translateY(0)';
+							e.currentTarget.style.boxShadow = `0 2px 6px rgba(99, 102, 241, 0.25)`;
 						}}
 					>
 						+ Upload

@@ -4,6 +4,7 @@ import type {
 	ImageElement,
 	VideoElement,
 	AudioElement,
+	CaptionElement,
 	EditorTrack,
 	Transform,
 	Asset,
@@ -38,17 +39,17 @@ export function createTextElement(
 		durationInFrames: 150,
 		transform: {
 			...defaultTransform,
-			x: 280, // More centered on typical 1920x1080 canvas
-			y: 400,
-			width: 1360,
+			x: 760, // Centered horizontally (1920/2 - 400/2)
+			y: 440, // Centered vertically (1080/2 - 200/2)
+			width: 400,
 			height: 200,
 		},
 		transitions: { ...defaultTransitions },
 		text: 'Add your text here',
-		fontSize: 96,
+		fontSize: 48,
 		fontFamily: 'Arial, sans-serif',
 		fontWeight: 700,
-		color: '#FFFFFF', // White with black stroke for maximum visibility
+		color: '#6366f1', // Vibrant indigo - visible on any background
 		textAlign: 'center',
 		lineHeight: 1.2,
 		...overrides,
@@ -66,10 +67,17 @@ export function createSolidElement(
 		trackId,
 		from: 0,
 		durationInFrames: 150,
-		transform: { ...defaultTransform },
+		transform: {
+			x: 760, // Centered horizontally (1920/2 - 400/2)
+			y: 440, // Centered vertically (1080/2 - 200/2)
+			width: 400,
+			height: 200,
+			rotation: 0,
+			opacity: 1,
+		},
 		transitions: { ...defaultTransitions },
-		color: '#3b82f6',
-		borderRadius: 0,
+		color: '#6366f1', // Vibrant indigo
+		borderRadius: 8,
 		...overrides,
 	};
 }
@@ -146,6 +154,43 @@ export function createAsset(
 		name: file.name,
 		type,
 		src: URL.createObjectURL(file),
+	};
+}
+
+export function createCaptionElement(
+	trackId: string,
+	overrides?: Partial<CaptionElement>,
+): CaptionElement {
+	return {
+		id: generateId(),
+		type: 'caption',
+		name: 'Caption',
+		trackId,
+		from: 0,
+		durationInFrames: 90, // 3 seconds at 30fps
+		transform: {
+			x: 160, // 10% padding from left (1920 * 0.1 = 192, minus half width)
+			y: 880, // Bottom position with padding
+			width: 1600, // 80% of 1920 width
+			height: 120,
+			rotation: 0,
+			opacity: 1,
+		},
+		transitions: { ...defaultTransitions },
+		text: 'Add your caption here',
+		fontSize: 36,
+		fontFamily: 'Arial, sans-serif',
+		fontWeight: 700,
+		color: '#ffffff',
+		backgroundColor: '#000000',
+		backgroundOpacity: 0.75,
+		textAlign: 'center',
+		lineHeight: 1.3,
+		padding: 16,
+		borderRadius: 8,
+		highlightColor: '#facc15', // Yellow highlight for current word
+		position: 'bottom',
+		...overrides,
 	};
 }
 

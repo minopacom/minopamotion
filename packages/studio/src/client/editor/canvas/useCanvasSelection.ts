@@ -23,8 +23,9 @@ export function useCanvasSelection({
 	const handleClick = useCallback(
 		(e: React.MouseEvent) => {
 			const rect = e.currentTarget.getBoundingClientRect();
-			const px = (e.clientX - rect.left - offsetX) / scale;
-			const py = (e.clientY - rect.top - offsetY) / scale;
+			// Don't subtract offsetX/offsetY - getBoundingClientRect already accounts for element position
+			const px = (e.clientX - rect.left) / scale;
+			const py = (e.clientY - rect.top) / scale;
 
 			// Iterate top-to-bottom (highest track first) to find topmost hit
 			const sorted = [...elements].sort(

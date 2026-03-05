@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback, useMemo } from 'react';
+import React, { useRef, useEffect, useCallback, useMemo, useState } from 'react';
 import type { PlayerRef } from '@minopamotion/player';
 import type { TComposition } from '@minopamotion/core';
 import type { TrackDefinition } from './store/types.js';
@@ -7,7 +7,7 @@ import {
 	StudioStateContext,
 	StudioDispatchContext,
 } from './store/context.js';
-import { Toolbar } from './toolbar/Toolbar.js';
+import { GroupedToolbar } from './toolbar/GroupedToolbar.js';
 import { CompositionList } from './panels/CompositionList.js';
 import { PropsPanel } from './panels/PropsPanel.js';
 import { Preview } from './preview/Preview.js';
@@ -21,6 +21,8 @@ import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts.js';
 import { useDragHandle } from './hooks/useDragHandle.js';
 import { ResizeHandle } from './components/ResizeHandle.js';
 import { colors } from './utils/colors.js';
+import { useMediaQuery, breakpoints } from './utils/useMediaQuery.js';
+import { MobileStudio } from './mobile/MobileStudio.js';
 
 export interface StudioProps {
 	compositions: TComposition[];
@@ -30,6 +32,10 @@ export interface StudioProps {
 export function Studio({ compositions, tracks }: StudioProps) {
 	const [state, dispatch] = useStudioStore(compositions, tracks);
 	const playerRef = useRef<PlayerRef>(null);
+	const isMobile = useMediaQuery(breakpoints.mobile);
+	const isTablet = useMediaQuery(breakpoints.tablet);
+	const [showMobileMenu, setShowMobileMenu] = useState(false);
+	const [leftPanelCollapsed, setLeftPanelCollapsed] = useState(false);
 
 	const selectedComp = state.compositions.find(
 		(c) => c.id === state.selectedCompositionId,
@@ -142,6 +148,21 @@ export function Studio({ compositions, tracks }: StudioProps) {
 		),
 	});
 
+	// Use mobile layout for small screens
+	if (isMobile) {
+		return (
+			<StudioStateContext.Provider value={state}>
+				<StudioDispatchContext.Provider value={dispatch}>
+					<MobileStudio playerRef={playerRef} activeComp={activeComp} />
+					{/* Overlays */}
+					{state.showShortcutsHelp && <KeyboardShortcutsHelp />}
+					{state.showQuickSwitcher && <QuickSwitcher />}
+					{state.showRenderDialog && <RenderDialog playerRef={playerRef} />}
+				</StudioDispatchContext.Provider>
+			</StudioStateContext.Provider>
+		);
+	}
+
 	return (
 		<StudioStateContext.Provider value={state}>
 			<StudioDispatchContext.Provider value={dispatch}>
@@ -158,7 +179,11 @@ export function Studio({ compositions, tracks }: StudioProps) {
 					}}
 				>
 					{/* Toolbar */}
-					<Toolbar playerRef={playerRef} />
+					<GroupedToolbar
+						playerRef={playerRef}
+						leftPanelCollapsed={leftPanelCollapsed}
+						onToggleLeftPanel={!isTablet ? () => setLeftPanelCollapsed(!leftPanelCollapsed) : undefined}
+					/>
 
 					{/* Main area */}
 					<div
@@ -168,25 +193,7 @@ export function Studio({ compositions, tracks }: StudioProps) {
 							overflow: 'hidden',
 						}}
 					>
-						{/* Left panel */}
-						<div
-							style={{
-								width: state.leftPanelWidth,
-								flexShrink: 0,
-								overflow: 'hidden',
-							}}
-						>
-							{state.editorMode ? (
-								<AssetLibrary />
-							) : (
-								<CompositionList />
-							)}
-						</div>
-
-						{/* Left resize handle */}
-						<ResizeHandle direction="horizontal" {...leftDrag} />
-
-						{/* Preview */}
+						{/* Preview - Full width, no left panel */}
 						<div
 							style={{
 								flex: 1,
@@ -214,19 +221,26 @@ export function Studio({ compositions, tracks }: StudioProps) {
 							)}
 						</div>
 
-						{/* Right resize handle */}
-						<ResizeHandle direction="horizontal" {...rightDrag} />
+						{/* Right panel - hide on tablets if screen is too small */}
+						{!isTablet && (
+							<>
+								{/* Right resize handle */}
+								<ResizeHandle direction="horizontal" {...rightDrag} />
 
-						{/* Right panel */}
-						<div
-							style={{
-								width: state.rightPanelWidth,
-								flexShrink: 0,
-								overflow: 'hidden',
-							}}
-						>
-							<PropsPanel />
-						</div>
+								{/* Right panel */}
+								<div
+									style={{
+										width: state.rightPanelWidth,
+										minWidth: 200,
+										maxWidth: 450,
+										flexShrink: 0,
+										overflow: 'hidden',
+									}}
+								>
+									<PropsPanel />
+								</div>
+							</>
+						)}
 					</div>
 
 					{/* Timeline resize handle */}
@@ -246,7 +260,7 @@ export function Studio({ compositions, tracks }: StudioProps) {
 				{/* Overlays */}
 				{state.showShortcutsHelp && <KeyboardShortcutsHelp />}
 				{state.showQuickSwitcher && <QuickSwitcher />}
-				{state.showRenderDialog && <RenderDialog />}
+				{state.showRenderDialog && <RenderDialog playerRef={playerRef} />}
 			</StudioDispatchContext.Provider>
 		</StudioStateContext.Provider>
 	);

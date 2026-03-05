@@ -155,18 +155,21 @@ export function useCanvasDrag({ dispatch, scale }: UseCanvasDragOptions) {
 			};
 
 			// Throttle using RAF - only one update per frame
-			if (pendingUpdateRef.current) {
+			// Skip RAF if already pending to avoid queue buildup
+			if (rafRef.current !== null) {
+				// Update is already scheduled, just update the pending function
 				pendingUpdateRef.current = performUpdate;
-			} else {
-				pendingUpdateRef.current = performUpdate;
-				rafRef.current = requestAnimationFrame(() => {
-					if (pendingUpdateRef.current) {
-						pendingUpdateRef.current();
-						pendingUpdateRef.current = null;
-					}
-					rafRef.current = null;
-				});
+				return;
 			}
+
+			pendingUpdateRef.current = performUpdate;
+			rafRef.current = requestAnimationFrame(() => {
+				if (pendingUpdateRef.current) {
+					pendingUpdateRef.current();
+					pendingUpdateRef.current = null;
+				}
+				rafRef.current = null;
+			});
 		},
 		[dispatch, scale],
 	);

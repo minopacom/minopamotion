@@ -66,9 +66,9 @@ export function fitToCanvas(
 		width = canvasHeight * mediaAspect;
 	}
 
-	// Center the media
-	const x = (canvasWidth - width) / 2;
-	const y = (canvasHeight - height) / 2;
+	// Place media at top-left corner
+	const x = 0;
+	const y = 0;
 
 	return { width, height, x, y };
 }

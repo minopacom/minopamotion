@@ -6,5 +6,5 @@ export default defineConfig({
   dts: true,
   sourcemap: true,
   clean: true,
-  external: ['react', 'react-dom', 'vite', '@minopamotion/core', '@minopamotion/player'],
+  external: ['react', 'react-dom', 'vite', '@minopamotion/core', '@minopamotion/player', '@minopamotion/webcodecs', 'webm-muxer', 'html2canvas'],
 });

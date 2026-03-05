@@ -91,12 +91,37 @@ export interface AudioElement extends BaseElement {
 	startFrom: number;
 }
 
+export interface CaptionWord {
+	text: string;
+	start: number; // Start time in frames relative to caption start
+	duration: number; // Duration in frames
+}
+
+export interface CaptionElement extends BaseElement {
+	type: 'caption';
+	text: string;
+	words?: CaptionWord[]; // For word-by-word highlighting
+	fontSize: number;
+	fontFamily: string;
+	fontWeight: number;
+	color: string;
+	backgroundColor: string;
+	backgroundOpacity: number;
+	textAlign: 'left' | 'center' | 'right';
+	lineHeight: number;
+	padding: number;
+	borderRadius: number;
+	highlightColor?: string; // Color for current word highlight
+	position: 'top' | 'center' | 'bottom'; // Quick positioning
+}
+
 export type EditorElement =
 	| TextElement
 	| SolidElement
 	| ImageElement
 	| VideoElement
-	| AudioElement;
+	| AudioElement
+	| CaptionElement;
 
 export type EditorElementType = EditorElement['type'];
 

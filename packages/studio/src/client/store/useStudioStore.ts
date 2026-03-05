@@ -9,6 +9,12 @@ export function createInitialState(
 	tracks?: TrackDefinition[],
 ): StudioState {
 	const first = compositions[0] ?? null;
+
+	// Responsive panel widths based on screen size
+	const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 1920;
+	const leftPanelWidth = screenWidth < 1280 ? 200 : 240;
+	const rightPanelWidth = screenWidth < 1280 ? 240 : 300;
+
 	return {
 		...createInitialEditorState(),
 		compositions,
@@ -23,12 +29,12 @@ export function createInitialState(
 		previewZoom: 0,
 		canvasZoom: 1, // 1 = 100%
 		canvasZoomFitToScreen: true, // Start with fit-to-screen
-		showCheckerboard: false,
+		showCheckerboard: true, // Show checkerboard by default for better visibility
 		inPoint: null,
 		outPoint: null,
 		timelineZoom: 2.0, // Start zoomed in to allow scrolling and see details (2x container width)
-		leftPanelWidth: 240,
-		rightPanelWidth: 300,
+		leftPanelWidth,
+		rightPanelWidth,
 		timelineHeight: 280, // Increased from 200 for better usability
 		propsMode: 'smart',
 		showShortcutsHelp: false,

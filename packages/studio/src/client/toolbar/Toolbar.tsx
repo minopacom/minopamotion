@@ -9,9 +9,11 @@ import { colors } from '../utils/colors.js';
 
 interface ToolbarProps {
 	playerRef: React.RefObject<PlayerRef | null>;
+	leftPanelCollapsed?: boolean;
+	onToggleLeftPanel?: () => void;
 }
 
-export function Toolbar({ playerRef }: ToolbarProps) {
+export function Toolbar({ playerRef, leftPanelCollapsed, onToggleLeftPanel }: ToolbarProps) {
 	const state = useStudioState();
 	const dispatch = useStudioDispatch();
 	const comp = state.compositions.find(
@@ -21,16 +23,59 @@ export function Toolbar({ playerRef }: ToolbarProps) {
 	return (
 		<div
 			style={{
-				height: 48,
+				height: 56,
 				background: colors.bgPanel,
 				borderBottom: `1px solid ${colors.border}`,
 				display: 'flex',
 				alignItems: 'center',
-				padding: '0 12px',
-				gap: 12,
+				padding: '0 16px',
+				gap: 16,
 				flexShrink: 0,
+				backdropFilter: 'blur(10px)',
 			}}
 		>
+			{/* Left panel toggle */}
+			{onToggleLeftPanel && (
+				<>
+					<button
+						onClick={onToggleLeftPanel}
+						style={{
+							background: leftPanelCollapsed ? colors.bgInput : colors.bgSelected,
+							color: leftPanelCollapsed ? colors.text : colors.textBright,
+							border: `1px solid ${colors.border}`,
+							borderRadius: 6,
+							padding: '6px 12px',
+							fontSize: 12,
+							cursor: 'pointer',
+							transition: 'all 0.15s ease',
+							fontWeight: 500,
+						}}
+						onMouseEnter={(e) => {
+							if (leftPanelCollapsed) {
+								e.currentTarget.style.background = colors.bgHover;
+								e.currentTarget.style.borderColor = colors.borderLight;
+							}
+						}}
+						onMouseLeave={(e) => {
+							if (leftPanelCollapsed) {
+								e.currentTarget.style.background = colors.bgInput;
+								e.currentTarget.style.borderColor = colors.border;
+							}
+						}}
+						title={leftPanelCollapsed ? 'Show Assets Panel' : 'Hide Assets Panel'}
+					>
+						{leftPanelCollapsed ? '📁 Assets' : '◀ Hide'}
+					</button>
+					<div
+						style={{
+							width: 1,
+							height: 24,
+							background: colors.border,
+						}}
+					/>
+				</>
+			)}
+
 			<EditorToolbar />
 
 			<div style={{ flex: 1 }} />
@@ -41,11 +86,13 @@ export function Toolbar({ playerRef }: ToolbarProps) {
 				<span
 					style={{
 						fontSize: 11,
-						color: colors.textMuted,
+						color: colors.textDim,
 						fontFamily: 'monospace',
-						padding: '4px 8px',
-						background: colors.bgInput,
-						borderRadius: 4,
+						padding: '6px 10px',
+						background: colors.glass,
+						border: `1px solid ${colors.glassBorder}`,
+						borderRadius: 6,
+						fontWeight: 500,
 					}}
 				>
 					{comp.id}
@@ -58,15 +105,16 @@ export function Toolbar({ playerRef }: ToolbarProps) {
 				style={{
 					background: state.showCheckerboard
 						? colors.bgSelected
-						: colors.bgInput,
+						: colors.glass,
 					color: state.showCheckerboard ? colors.textBright : colors.text,
-					border: `1px solid ${state.showCheckerboard ? colors.borderFocus : colors.border}`,
-					borderRadius: 6,
-					padding: '6px 12px',
+					border: `1px solid ${state.showCheckerboard ? colors.borderFocus : colors.glassBorder}`,
+					borderRadius: 8,
+					padding: '8px 14px',
 					fontSize: 12,
 					cursor: 'pointer',
-					transition: 'all 0.15s ease',
-					fontWeight: state.showCheckerboard ? 600 : 400,
+					transition: 'all 0.2s ease',
+					fontWeight: 500,
+					boxShadow: state.showCheckerboard ? `0 0 0 3px ${colors.selectionGlow}` : 'none',
 				}}
 				onMouseEnter={(e) => {
 					if (!state.showCheckerboard) {
@@ -76,8 +124,8 @@ export function Toolbar({ playerRef }: ToolbarProps) {
 				}}
 				onMouseLeave={(e) => {
 					if (!state.showCheckerboard) {
-						e.currentTarget.style.background = colors.bgInput;
-						e.currentTarget.style.borderColor = colors.border;
+						e.currentTarget.style.background = colors.glass;
+						e.currentTarget.style.borderColor = colors.glassBorder;
 					}
 				}}
 				onClick={() => dispatch({ type: 'TOGGLE_CHECKERBOARD' })}
@@ -90,32 +138,30 @@ export function Toolbar({ playerRef }: ToolbarProps) {
 
 			<button
 				style={{
-					background: colors.accent,
+					background: colors.accentGradient,
 					color: colors.textBright,
 					border: 'none',
-					borderRadius: 6,
-					padding: '6px 16px',
+					borderRadius: 8,
+					padding: '8px 20px',
 					fontSize: 12,
 					cursor: 'pointer',
 					fontWeight: 600,
-					transition: 'all 0.15s ease',
-					boxShadow: `0 1px 2px ${colors.overlayLight}`,
+					transition: 'all 0.2s ease',
+					boxShadow: `0 2px 8px rgba(99, 102, 241, 0.3)`,
 				}}
 				onMouseEnter={(e) => {
-					e.currentTarget.style.background = colors.accentLight;
 					e.currentTarget.style.transform = 'translateY(-1px)';
-					e.currentTarget.style.boxShadow = `0 2px 4px ${colors.overlayLight}`;
+					e.currentTarget.style.boxShadow = `0 4px 12px rgba(99, 102, 241, 0.4)`;
 				}}
 				onMouseLeave={(e) => {
-					e.currentTarget.style.background = colors.accent;
 					e.currentTarget.style.transform = 'translateY(0)';
-					e.currentTarget.style.boxShadow = `0 1px 2px ${colors.overlayLight}`;
+					e.currentTarget.style.boxShadow = `0 2px 8px rgba(99, 102, 241, 0.3)`;
 				}}
 				onClick={() =>
 					dispatch({ type: 'SHOW_RENDER_DIALOG', show: true })
 				}
 			>
-				Render
+				✨ Render
 			</button>
 		</div>
 	);

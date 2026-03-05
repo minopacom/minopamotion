@@ -6,6 +6,7 @@ import { SolidRenderer } from './SolidRenderer.js';
 import { ImageRenderer } from './ImageRenderer.js';
 import { VideoRenderer } from './VideoRenderer.js';
 import { AudioRenderer } from './AudioRenderer.js';
+import { CaptionRenderer } from './CaptionRenderer.js';
 import { calculateTransitionStyles } from './transitions/apply-transition.js';
 import { calculateTimelineTransitionEffect } from './transitions/apply-timeline-transition.js';
 
@@ -77,6 +78,7 @@ export function ElementRenderer({ element, fps, timelineTransitions }: ElementRe
 			{element.type === 'image' && <ImageRenderer element={element} />}
 			{element.type === 'video' && <VideoRenderer element={element} fps={fps} />}
 			{element.type === 'audio' && <AudioRenderer element={element} fps={fps} />}
+			{element.type === 'caption' && <CaptionRenderer element={element} />}
 		</div>
 	);
 }

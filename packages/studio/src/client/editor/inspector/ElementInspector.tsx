@@ -6,6 +6,7 @@ import { FillSection } from './FillSection.js';
 import { TextSection } from './TextSection.js';
 import { SolidSection } from './SolidSection.js';
 import { MediaSection } from './MediaSection.js';
+import { CaptionSection } from './CaptionSection.js';
 import { TransitionControls } from './TransitionControls.js';
 import { colors } from '../../utils/colors.js';
 import type { StudioAction } from '../../store/types.js';
@@ -15,6 +16,7 @@ import type {
 	ImageElement,
 	VideoElement,
 	AudioElement,
+	CaptionElement,
 } from '../types.js';
 
 type InspectorTab = 'video' | 'audio' | 'layout' | 'transitions';
@@ -270,6 +272,12 @@ export function ElementInspector() {
 			{element.type === 'solid' && (
 				<SolidSection
 					element={element as SolidElement}
+					dispatch={dispatch}
+				/>
+			)}
+			{element.type === 'caption' && (
+				<CaptionSection
+					element={element as CaptionElement}
 					dispatch={dispatch}
 				/>
 			)}
