@@ -93,7 +93,7 @@ export function useTimelineDrag({
 					);
 
 					// Calculate target track based on vertical movement
-					const TRACK_HEIGHT = 30; // px per track
+					const TRACK_HEIGHT = 60; // px per track (matches LANE_HEIGHT in EditorTrackLane.tsx)
 					const deltaY = e.clientY - drag.startY;
 					const trackDelta = Math.round(deltaY / TRACK_HEIGHT);
 					const currentTrackIndex = tracks.findIndex(

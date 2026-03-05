@@ -32,16 +32,16 @@ export function createTextElement(
 		durationInFrames: 150,
 		transform: {
 			...defaultTransform,
-			x: 100, // Center-ish position for better visibility
-			y: 100,
-			width: 600,
-			height: 100,
+			x: 280, // More centered on typical 1920x1080 canvas
+			y: 400,
+			width: 1360,
+			height: 200,
 		},
-		text: 'Double-click to edit',
-		fontSize: 64,
+		text: 'Add your text here',
+		fontSize: 96,
 		fontFamily: 'Arial, sans-serif',
 		fontWeight: 700,
-		color: '#FFD700', // Gold color - highly visible on most backgrounds
+		color: '#FFFFFF', // White with black stroke for maximum visibility
 		textAlign: 'center',
 		lineHeight: 1.2,
 		...overrides,
@@ -146,6 +146,7 @@ export function createEditorTrack(
 		name: 'Track',
 		visible: true,
 		locked: false,
+		muted: false,
 		...overrides,
 	};
 }

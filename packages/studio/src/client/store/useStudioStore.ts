@@ -29,7 +29,7 @@ export function createInitialState(
 		timelineZoom: 2.0, // Start zoomed in to allow scrolling and see details (2x container width)
 		leftPanelWidth: 240,
 		rightPanelWidth: 300,
-		timelineHeight: 200,
+		timelineHeight: 280, // Increased from 200 for better usability
 		propsMode: 'smart',
 		showShortcutsHelp: false,
 		showQuickSwitcher: false,

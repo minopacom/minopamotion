@@ -18,7 +18,7 @@ interface EditorTrackLaneProps {
 	onDragTrimEnd: (e: React.PointerEvent, element: EditorElement) => void;
 }
 
-const LANE_HEIGHT = 30;
+const LANE_HEIGHT = 60; // Increased from 30 for better visibility and usability
 
 export function EditorTrackLane({
 	track,
@@ -76,7 +76,7 @@ export function EditorTrackLane({
 				}}
 			>
 				<button
-					title={track.visible ? 'Hide' : 'Show'}
+					title={track.visible ? 'Hide track (H)' : 'Show track (H)'}
 					onClick={() =>
 						dispatch({
 							type: 'TOGGLE_TRACK_VISIBILITY',
@@ -87,17 +87,44 @@ export function EditorTrackLane({
 						background: 'none',
 						border: 'none',
 						color: track.visible
-							? colors.textDim
+							? colors.text
 							: colors.textMuted,
 						cursor: 'pointer',
-						fontSize: 10,
-						padding: 0,
+						fontSize: 14,
+						padding: 2,
+						display: 'flex',
+						alignItems: 'center',
+						opacity: track.visible ? 1 : 0.5,
 					}}
 				>
-					{track.visible ? 'V' : 'H'}
+					{track.visible ? '👁️' : '🚫'}
 				</button>
 				<button
-					title={track.locked ? 'Unlock' : 'Lock'}
+					title={track.muted ? 'Unmute audio (M)' : 'Mute audio (M)'}
+					onClick={() =>
+						dispatch({
+							type: 'TOGGLE_TRACK_MUTE',
+							trackId: track.id,
+						})
+					}
+					style={{
+						background: 'none',
+						border: 'none',
+						color: track.muted
+							? colors.error
+							: colors.text,
+						cursor: 'pointer',
+						fontSize: 14,
+						padding: 2,
+						display: 'flex',
+						alignItems: 'center',
+						opacity: track.muted ? 0.8 : 1,
+					}}
+				>
+					{track.muted ? '🔇' : '🔊'}
+				</button>
+				<button
+					title={track.locked ? 'Unlock track (L)' : 'Lock track (L)'}
 					onClick={() =>
 						dispatch({
 							type: 'TOGGLE_TRACK_LOCK',
@@ -108,14 +135,17 @@ export function EditorTrackLane({
 						background: 'none',
 						border: 'none',
 						color: track.locked
-							? colors.error
+							? colors.warning
 							: colors.textMuted,
 						cursor: 'pointer',
-						fontSize: 10,
-						padding: 0,
+						fontSize: 14,
+						padding: 2,
+						display: 'flex',
+						alignItems: 'center',
+						opacity: track.locked ? 1 : 0.6,
 					}}
 				>
-					{track.locked ? 'L' : 'U'}
+					{track.locked ? '🔒' : '🔓'}
 				</button>
 
 				{/* Layer number badge */}

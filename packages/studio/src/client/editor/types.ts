@@ -68,6 +68,7 @@ export interface EditorTrack {
 	name: string;
 	visible: boolean;
 	locked: boolean;
+	muted: boolean;
 }
 
 export interface Asset {

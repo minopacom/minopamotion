@@ -28,6 +28,8 @@ interface UseCanvasDragOptions {
 
 export function useCanvasDrag({ dispatch, scale }: UseCanvasDragOptions) {
 	const dragRef = useRef<DragState | null>(null);
+	const rafRef = useRef<number | null>(null);
+	const pendingUpdateRef = useRef<(() => void) | null>(null);
 
 	const startDrag = useCallback(
 		(
@@ -37,6 +39,8 @@ export function useCanvasDrag({ dispatch, scale }: UseCanvasDragOptions) {
 		) => {
 			e.preventDefault();
 			e.stopPropagation();
+
+			// Capture the pointer to ensure we receive events even outside the element
 			(e.target as HTMLElement).setPointerCapture(e.pointerId);
 
 			dragRef.current = {
@@ -58,96 +62,111 @@ export function useCanvasDrag({ dispatch, scale }: UseCanvasDragOptions) {
 			const dx = (e.clientX - drag.startX) / scale;
 			const dy = (e.clientY - drag.startY) / scale;
 
-			if (drag.handle === 'move') {
-				dispatch({
-					type: 'MOVE_ELEMENT',
-					id: drag.elementId,
-					x: Math.round(drag.startTransform.x + dx),
-					y: Math.round(drag.startTransform.y + dy),
-				});
-				return;
-			}
+			// Throttle updates using requestAnimationFrame for smooth performance
+			const performUpdate = () => {
+				if (drag.handle === 'move') {
+					dispatch({
+						type: 'MOVE_ELEMENT',
+						id: drag.elementId,
+						x: drag.startTransform.x + dx, // No rounding during drag for smoothness
+						y: drag.startTransform.y + dy,
+					});
+					return;
+				}
 
-			if (drag.handle === 'rotate') {
-				// Calculate rotation based on angle from center
-				const centerX =
-					drag.startTransform.x + drag.startTransform.width / 2;
-				const centerY =
-					drag.startTransform.y + drag.startTransform.height / 2;
-				const currentX = centerX + dx;
-				const currentY = centerY + dy;
-				const angle =
-					(Math.atan2(
-						currentY - centerY,
-						currentX - centerX,
-					) *
-						180) /
-					Math.PI;
-				const startAngle =
-					(Math.atan2(
-						drag.startY / scale -
-							drag.startTransform.y -
-							drag.startTransform.height / 2,
-						drag.startX / scale -
-							drag.startTransform.x -
-							drag.startTransform.width / 2,
-					) *
-						180) /
-					Math.PI;
+				if (drag.handle === 'rotate') {
+					// Calculate rotation based on angle from center
+					const centerX =
+						drag.startTransform.x + drag.startTransform.width / 2;
+					const centerY =
+						drag.startTransform.y + drag.startTransform.height / 2;
+					const currentX = centerX + dx;
+					const currentY = centerY + dy;
+					const angle =
+						(Math.atan2(
+							currentY - centerY,
+							currentX - centerX,
+						) *
+							180) /
+						Math.PI;
+					const startAngle =
+						(Math.atan2(
+							drag.startY / scale -
+								drag.startTransform.y -
+								drag.startTransform.height / 2,
+							drag.startX / scale -
+								drag.startTransform.x -
+								drag.startTransform.width / 2,
+						) *
+							180) /
+						Math.PI;
+					dispatch({
+						type: 'RESIZE_ELEMENT',
+						id: drag.elementId,
+						transform: {
+							rotation: drag.startTransform.rotation + angle - startAngle, // No rounding during drag
+						},
+					});
+					return;
+				}
+
+				// Resize handles
+				const t = drag.startTransform;
+				let newX = t.x;
+				let newY = t.y;
+				let newW = t.width;
+				let newH = t.height;
+
+				if (drag.handle.includes('w')) {
+					newX = t.x + dx;
+					newW = t.width - dx;
+				}
+				if (drag.handle.includes('e')) {
+					newW = t.width + dx;
+				}
+				if (drag.handle.includes('n')) {
+					newY = t.y + dy;
+					newH = t.height - dy;
+				}
+				if (drag.handle.includes('s')) {
+					newH = t.height + dy;
+				}
+
+				// Enforce minimum size
+				if (newW < 10) {
+					newW = 10;
+					if (drag.handle.includes('w')) newX = t.x + t.width - 10;
+				}
+				if (newH < 10) {
+					newH = 10;
+					if (drag.handle.includes('n')) newY = t.y + t.height - 10;
+				}
+
 				dispatch({
 					type: 'RESIZE_ELEMENT',
 					id: drag.elementId,
 					transform: {
-						rotation: Math.round(
-							drag.startTransform.rotation + angle - startAngle,
-						),
+						x: newX, // No rounding during drag
+						y: newY,
+						width: newW,
+						height: newH,
 					},
 				});
-				return;
-			}
+			};
 
-			// Resize handles
-			const t = drag.startTransform;
-			let newX = t.x;
-			let newY = t.y;
-			let newW = t.width;
-			let newH = t.height;
-
-			if (drag.handle.includes('w')) {
-				newX = t.x + dx;
-				newW = t.width - dx;
+			// Throttle using RAF - only one update per frame
+			if (pendingUpdateRef.current) {
+				pendingUpdateRef.current = performUpdate;
+			} else {
+				pendingUpdateRef.current = performUpdate;
+				rafRef.current = requestAnimationFrame(() => {
+					if (pendingUpdateRef.current) {
+						pendingUpdateRef.current();
+						pendingUpdateRef.current = null;
+					}
+					rafRef.current = null;
+				});
 			}
-			if (drag.handle.includes('e')) {
-				newW = t.width + dx;
-			}
-			if (drag.handle.includes('n')) {
-				newY = t.y + dy;
-				newH = t.height - dy;
-			}
-			if (drag.handle.includes('s')) {
-				newH = t.height + dy;
-			}
-
-			// Enforce minimum size
-			if (newW < 10) {
-				newW = 10;
-				if (drag.handle.includes('w')) newX = t.x + t.width - 10;
-			}
-			if (newH < 10) {
-				newH = 10;
-				if (drag.handle.includes('n')) newY = t.y + t.height - 10;
-			}
-
-			dispatch({
-				type: 'RESIZE_ELEMENT',
-				id: drag.elementId,
-				transform: {
-					x: Math.round(newX),
-					y: Math.round(newY),
-					width: Math.round(newW),
-					height: Math.round(newH),
-				},
-			});
 		},
 		[dispatch, scale],
 	);
@@ -155,6 +174,13 @@ export function useCanvasDrag({ dispatch, scale }: UseCanvasDragOptions) {
 	const onPointerUp = useCallback(
 		(_e: React.PointerEvent) => {
 			if (dragRef.current) {
+				// Cancel any pending RAF
+				if (rafRef.current !== null) {
+					cancelAnimationFrame(rafRef.current);
+					rafRef.current = null;
+				}
+				pendingUpdateRef.current = null;
+
 				dragRef.current = null;
 				dispatch({ type: 'HISTORY_COMMIT' });
 			}

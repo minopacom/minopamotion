@@ -29,15 +29,14 @@ export function TextRenderer({ element }: TextRendererProps) {
 				wordBreak: 'break-word',
 				overflow: 'hidden',
 				userSelect: 'none',
-				// Add text stroke for better visibility on any background
+				// Subtle text stroke for visibility without being overpowering
 				textShadow: `
-					-2px -2px 0 #000,
-					2px -2px 0 #000,
-					-2px 2px 0 #000,
-					2px 2px 0 #000,
-					0 0 10px rgba(0,0,0,0.5)
+					2px 2px 4px rgba(0,0,0,0.8),
+					-1px -1px 0 rgba(0,0,0,0.4),
+					1px -1px 0 rgba(0,0,0,0.4),
+					-1px 1px 0 rgba(0,0,0,0.4),
+					1px 1px 0 rgba(0,0,0,0.4)
 				`,
-				WebkitTextStroke: '1px rgba(0,0,0,0.5)',
 			}}
 		>
 			{element.text}

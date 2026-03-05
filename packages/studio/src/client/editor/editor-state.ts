@@ -43,6 +43,7 @@ export type EditorAction =
 	| { type: 'REORDER_TRACKS'; fromIndex: number; toIndex: number }
 	| { type: 'TOGGLE_TRACK_VISIBILITY'; trackId: string }
 	| { type: 'TOGGLE_TRACK_LOCK'; trackId: string }
+	| { type: 'TOGGLE_TRACK_MUTE'; trackId: string }
 	| { type: 'HISTORY_COMMIT' }
 	| { type: 'NUDGE_ELEMENTS'; ids: string[]; dx: number; dy: number }
 	| { type: 'HISTORY_UNDO' }
@@ -104,6 +105,7 @@ export function isEditorAction(action: { type: string }): action is EditorAction
 		'REORDER_TRACKS',
 		'TOGGLE_TRACK_VISIBILITY',
 		'TOGGLE_TRACK_LOCK',
+		'TOGGLE_TRACK_MUTE',
 		'NUDGE_ELEMENTS',
 		'HISTORY_COMMIT',
 		'HISTORY_UNDO',
@@ -448,6 +450,19 @@ export function editorReducer(
 					tracks: state.editorScene.tracks.map((t) =>
 						t.id === action.trackId
 							? { ...t, locked: !t.locked }
+							: t,
+					),
+				},
+			};
+
+		case 'TOGGLE_TRACK_MUTE':
+			return {
+				...state,
+				editorScene: {
+					...state.editorScene,
+					tracks: state.editorScene.tracks.map((t) =>
+						t.id === action.trackId
+							? { ...t, muted: !t.muted }
 							: t,
 					),
 				},

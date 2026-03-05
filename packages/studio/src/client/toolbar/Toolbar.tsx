@@ -1,12 +1,11 @@
 import React from 'react';
 import type { PlayerRef } from '@minopamotion/player';
 import { useStudioState, useStudioDispatch } from '../store/context.js';
-import { PlaybackControls } from './PlaybackControls.js';
 import { ZoomSelector } from './ZoomSelector.js';
 import { RateSelector } from './RateSelector.js';
+import { ResolutionSelector } from './ResolutionSelector.js';
 import { EditorToolbar } from '../editor/toolbar/EditorToolbar.js';
 import { colors } from '../utils/colors.js';
-import { formatTime } from '../utils/format-time.js';
 
 interface ToolbarProps {
 	playerRef: React.RefObject<PlayerRef | null>;
@@ -22,50 +21,21 @@ export function Toolbar({ playerRef }: ToolbarProps) {
 	return (
 		<div
 			style={{
-				height: 40,
+				height: 48,
 				background: colors.bgPanel,
 				borderBottom: `1px solid ${colors.border}`,
 				display: 'flex',
 				alignItems: 'center',
-				padding: '0 8px',
-				gap: 8,
+				padding: '0 12px',
+				gap: 12,
 				flexShrink: 0,
 			}}
 		>
-			<PlaybackControls playerRef={playerRef} />
-
-			<div
-				style={{
-					width: 1,
-					height: 20,
-					background: colors.border,
-				}}
-			/>
-
 			<EditorToolbar />
 
-			<div
-				style={{
-					width: 1,
-					height: 20,
-					background: colors.border,
-				}}
-			/>
-
-			{comp && (
-				<span
-					style={{
-						fontSize: 12,
-						color: colors.textDim,
-						fontFamily: 'monospace',
-					}}
-				>
-					{formatTime(state.currentFrame, comp.fps)} /{' '}
-					{formatTime(comp.durationInFrames, comp.fps)}
-				</span>
-			)}
-
 			<div style={{ flex: 1 }} />
+
+			<ResolutionSelector />
 
 			{comp && (
 				<span
@@ -73,6 +43,9 @@ export function Toolbar({ playerRef }: ToolbarProps) {
 						fontSize: 11,
 						color: colors.textMuted,
 						fontFamily: 'monospace',
+						padding: '4px 8px',
+						background: colors.bgInput,
+						borderRadius: 4,
 					}}
 				>
 					{comp.id}
@@ -86,12 +59,26 @@ export function Toolbar({ playerRef }: ToolbarProps) {
 					background: state.showCheckerboard
 						? colors.bgSelected
 						: colors.bgInput,
-					color: colors.text,
-					border: `1px solid ${colors.border}`,
-					borderRadius: 4,
-					padding: '4px 8px',
+					color: state.showCheckerboard ? colors.textBright : colors.text,
+					border: `1px solid ${state.showCheckerboard ? colors.borderFocus : colors.border}`,
+					borderRadius: 6,
+					padding: '6px 12px',
 					fontSize: 12,
 					cursor: 'pointer',
+					transition: 'all 0.15s ease',
+					fontWeight: state.showCheckerboard ? 600 : 400,
+				}}
+				onMouseEnter={(e) => {
+					if (!state.showCheckerboard) {
+						e.currentTarget.style.background = colors.bgHover;
+						e.currentTarget.style.borderColor = colors.borderLight;
+					}
+				}}
+				onMouseLeave={(e) => {
+					if (!state.showCheckerboard) {
+						e.currentTarget.style.background = colors.bgInput;
+						e.currentTarget.style.borderColor = colors.border;
+					}
 				}}
 				onClick={() => dispatch({ type: 'TOGGLE_CHECKERBOARD' })}
 				title="Toggle checkerboard background"
@@ -106,11 +93,23 @@ export function Toolbar({ playerRef }: ToolbarProps) {
 					background: colors.accent,
 					color: colors.textBright,
 					border: 'none',
-					borderRadius: 4,
-					padding: '4px 12px',
+					borderRadius: 6,
+					padding: '6px 16px',
 					fontSize: 12,
 					cursor: 'pointer',
 					fontWeight: 600,
+					transition: 'all 0.15s ease',
+					boxShadow: `0 1px 2px ${colors.overlayLight}`,
+				}}
+				onMouseEnter={(e) => {
+					e.currentTarget.style.background = colors.accentLight;
+					e.currentTarget.style.transform = 'translateY(-1px)';
+					e.currentTarget.style.boxShadow = `0 2px 4px ${colors.overlayLight}`;
+				}}
+				onMouseLeave={(e) => {
+					e.currentTarget.style.background = colors.accent;
+					e.currentTarget.style.transform = 'translateY(0)';
+					e.currentTarget.style.boxShadow = `0 1px 2px ${colors.overlayLight}`;
 				}}
 				onClick={() =>
 					dispatch({ type: 'SHOW_RENDER_DIALOG', show: true })

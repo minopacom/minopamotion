@@ -71,7 +71,7 @@ export function EditorTrackArea({
 					{showDropZoneAbove && (
 						<div
 							style={{
-								height: 30,
+								height: 60,
 								background: `${colors.accent}22`,
 								border: `2px dashed ${colors.accent}`,
 								borderRadius: 4,
@@ -120,7 +120,7 @@ export function EditorTrackArea({
 					{showDropZoneBelow && (
 						<div
 							style={{
-								height: 30,
+								height: 60,
 								background: `${colors.accent}22`,
 								border: `2px dashed ${colors.accent}`,
 								borderRadius: 4,
@@ -144,13 +144,13 @@ export function EditorTrackArea({
 								position: 'absolute',
 								left: TRACK_HEADER_WIDTH + dragState.previewFrame * pxPerFrame,
 								top: dragState.previewTrackIndex !== undefined
-									? Math.max(0, dragState.previewTrackIndex) * 30
+									? Math.max(0, dragState.previewTrackIndex) * 60 // Match LANE_HEIGHT (60px)
 									: 0,
 								width: dragState.startDuration * pxPerFrame,
-								height: 28,
+								height: 56, // Match timeline item height (60px track - 2px top - 2px bottom gaps)
 								background: `${colors.accent}66`,
 								border: `2px solid ${colors.accent}`,
-								borderRadius: 4,
+								borderRadius: 6,
 								pointerEvents: 'none',
 								zIndex: 1000,
 								display: 'flex',

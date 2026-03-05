@@ -33,6 +33,13 @@ export function Timeline({ playerRef }: TimelineProps) {
 		(c) => c.id === state.selectedCompositionId,
 	);
 
+	// Calculate duration early - needed by useEffect hooks
+	const durationInFrames = comp
+		? (state.editorMode
+			? state.editorScene.settings.durationInFrames
+			: comp.durationInFrames)
+		: 0;
+
 	useEffect(() => {
 		const el = containerRef.current;
 		if (!el) return;
@@ -44,6 +51,35 @@ export function Timeline({ playerRef }: TimelineProps) {
 		obs.observe(el);
 		return () => obs.disconnect();
 	}, []);
+
+	// Auto-scroll timeline to follow playhead during playback
+	useEffect(() => {
+		if (!state.playing || !containerRef.current || !comp || durationInFrames === 0) return;
+
+		const container = containerRef.current;
+		const TRACK_HEADER_WIDTH = 140;
+		const canvasWidth = containerWidth - TRACK_HEADER_WIDTH;
+
+		// Calculate playhead position in pixels
+		const frameWidth = (canvasWidth * state.timelineZoom) / durationInFrames;
+		const playheadX = state.currentFrame * frameWidth;
+
+		// Get visible area
+		const scrollLeft = container.scrollLeft;
+		const visibleWidth = container.clientWidth - TRACK_HEADER_WIDTH;
+
+		// Auto-scroll if playhead is near the edge or out of view
+		const margin = visibleWidth * 0.2; // Start scrolling when 20% from edge
+		const relativeX = playheadX - scrollLeft;
+
+		if (relativeX > visibleWidth - margin) {
+			// Playhead is near right edge, scroll right
+			container.scrollLeft = playheadX - visibleWidth / 2;
+		} else if (relativeX < margin && scrollLeft > 0) {
+			// Playhead is near left edge, scroll left
+			container.scrollLeft = Math.max(0, playheadX - visibleWidth / 2);
+		}
+	}, [state.playing, state.currentFrame, containerWidth, state.timelineZoom, durationInFrames, comp, state.editorMode]);
 
 	const handleSeek = useCallback(
 		(frame: number) => {
@@ -91,11 +127,6 @@ export function Timeline({ playerRef }: TimelineProps) {
 			</div>
 		);
 	}
-
-	// Use editor scene duration if in editor mode, otherwise use composition duration
-	const durationInFrames = state.editorMode
-		? state.editorScene.settings.durationInFrames
-		: comp.durationInFrames;
 
 	// Total scrollable width - only the canvas area (not including track headers)
 	const TRACK_HEADER_WIDTH = 140;

@@ -76,7 +76,7 @@ export function TimelineItem({
 					startFrom={element.startFrom}
 					fps={fps}
 					width={width}
-					height={26}
+					height={48}
 				/>
 			)}
 			{showThumbnails && element.type === 'image' && (
@@ -87,7 +87,7 @@ export function TimelineItem({
 					startFrom={0}
 					fps={fps}
 					width={width}
-					height={26}
+					height={48}
 				/>
 			)}
 
@@ -99,14 +99,14 @@ export function TimelineItem({
 						bottom: 0,
 						left: 0,
 						right: 0,
-						height: element.type === 'video' ? 12 : 26, // Smaller for video (has thumbnails)
+						height: element.type === 'video' ? 20 : 48, // Smaller for video (has thumbnails)
 						pointerEvents: 'none',
 					}}
 				>
 					<AudioWaveform
 						src={element.src}
 						width={width}
-						height={element.type === 'video' ? 12 : 26}
+						height={element.type === 'video' ? 20 : 48}
 						startFrom={element.startFrom}
 						durationInFrames={element.durationInFrames}
 						fps={fps}
@@ -134,8 +134,8 @@ export function TimelineItem({
 				style={{
 					position: 'absolute',
 					inset: 0,
-					padding: '0 8px',
-					fontSize: 10,
+					padding: '0 10px',
+					fontSize: 12,
 					fontWeight: 600,
 					color: colors.textBright,
 					overflow: 'hidden',
@@ -145,17 +145,17 @@ export function TimelineItem({
 					userSelect: 'none',
 					display: 'flex',
 					alignItems: 'center',
-					gap: 4,
+					gap: 6,
 					background: showThumbnails
-						? 'linear-gradient(to bottom, rgba(0,0,0,0.5), transparent 50%)'
-						: 'rgba(0,0,0,0.2)',
+						? 'linear-gradient(to bottom, rgba(0,0,0,0.6), transparent 60%)'
+						: 'rgba(0,0,0,0.3)',
 					zIndex: 5,
 					pointerEvents: 'none',
-					textShadow: '0 1px 2px rgba(0,0,0,0.8)',
+					textShadow: '0 1px 3px rgba(0,0,0,0.9)',
 				}}
 			>
 				{/* Type icon */}
-				<span style={{ fontSize: 11, flexShrink: 0 }}>
+				<span style={{ fontSize: 14, flexShrink: 0 }}>
 					{element.type === 'text' && '📝'}
 					{element.type === 'solid' && '▭'}
 					{element.type === 'image' && '🖼️'}

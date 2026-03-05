@@ -7,51 +7,61 @@ export function EditorToolbar() {
 	const { editorMode, editorScene } = useStudioState();
 	const dispatch = useStudioDispatch();
 
-	const ensureTrack = () => {
-		if (editorScene.tracks.length === 0) {
-			const track = createEditorTrack({ name: 'Track 1' });
-			dispatch({ type: 'ADD_EDITOR_TRACK', track });
-			return track.id;
-		}
-		return editorScene.tracks[editorScene.tracks.length - 1].id;
-	};
-
 	const addText = () => {
-		const trackId = ensureTrack();
-		const element = createTextElement(trackId);
+		// Create a new track for each element (matches asset library behavior)
+		const trackNumber = editorScene.tracks.length + 1;
+		const track = createEditorTrack({ name: `Track ${trackNumber}` });
+		dispatch({ type: 'ADD_EDITOR_TRACK', track });
+
+		const element = createTextElement(track.id);
 		dispatch({ type: 'ADD_ELEMENT', element });
 		dispatch({ type: 'SELECT_ELEMENTS', ids: [element.id] });
 		dispatch({ type: 'HISTORY_COMMIT' });
 	};
 
 	const addSolid = () => {
-		const trackId = ensureTrack();
-		const element = createSolidElement(trackId);
+		// Create a new track for each element (matches asset library behavior)
+		const trackNumber = editorScene.tracks.length + 1;
+		const track = createEditorTrack({ name: `Track ${trackNumber}` });
+		dispatch({ type: 'ADD_EDITOR_TRACK', track });
+
+		const element = createSolidElement(track.id);
 		dispatch({ type: 'ADD_ELEMENT', element });
 		dispatch({ type: 'SELECT_ELEMENTS', ids: [element.id] });
 		dispatch({ type: 'HISTORY_COMMIT' });
 	};
 
+	const [hoveredButton, setHoveredButton] = React.useState<string | null>(null);
+
 	const buttonStyle: React.CSSProperties = {
 		background: colors.bgInput,
 		color: colors.text,
 		border: `1px solid ${colors.border}`,
-		borderRadius: 4,
-		padding: '4px 8px',
+		borderRadius: 6,
+		padding: '6px 12px',
 		fontSize: 12,
 		cursor: 'pointer',
+		transition: 'all 0.15s ease',
+		fontWeight: 500,
 	};
 
 	const toggleStyle: React.CSSProperties = {
-		...buttonStyle,
-		fontWeight: 600,
+		background: colors.bgInput,
+		color: colors.text,
+		border: `1px solid ${colors.border}`,
+		padding: '6px 14px',
 		fontSize: 11,
+		cursor: 'pointer',
+		transition: 'all 0.15s ease',
+		fontWeight: 600,
+		letterSpacing: '0.5px',
+		textTransform: 'uppercase' as const,
 	};
 
 	return (
-		<div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+		<div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
 			{/* Mode toggle */}
-			<div style={{ display: 'flex', gap: 0 }}>
+			<div style={{ display: 'flex', gap: 0, borderRadius: 6, overflow: 'hidden' }}>
 				{(['code', 'editor'] as const).map((mode) => {
 					const isActive =
 						mode === 'editor' ? editorMode : !editorMode;
@@ -72,10 +82,11 @@ export function EditorToolbar() {
 								color: isActive
 									? colors.textBright
 									: colors.textDim,
-								borderRadius:
-									mode === 'code'
-										? '4px 0 0 4px'
-										: '0 4px 4px 0',
+								borderRadius: 0,
+								borderLeft: mode === 'editor' ? 'none' : `1px solid ${colors.border}`,
+								borderRight: mode === 'code' ? 'none' : `1px solid ${colors.border}`,
+								borderTop: `1px solid ${colors.border}`,
+								borderBottom: `1px solid ${colors.border}`,
 							}}
 						>
 							{mode === 'code' ? 'Code' : 'Editor'}
@@ -89,15 +100,33 @@ export function EditorToolbar() {
 					<div
 						style={{
 							width: 1,
-							height: 20,
+							height: 24,
 							background: colors.border,
 						}}
 					/>
-					<button style={buttonStyle} onClick={addText}>
-						+ Text
+					<button
+						style={{
+							...buttonStyle,
+							background: hoveredButton === 'text' ? colors.bgHover : colors.bgInput,
+							borderColor: hoveredButton === 'text' ? colors.borderLight : colors.border,
+						}}
+						onMouseEnter={() => setHoveredButton('text')}
+						onMouseLeave={() => setHoveredButton(null)}
+						onClick={addText}
+					>
+						✏️ Text
 					</button>
-					<button style={buttonStyle} onClick={addSolid}>
-						+ Rect
+					<button
+						style={{
+							...buttonStyle,
+							background: hoveredButton === 'rect' ? colors.bgHover : colors.bgInput,
+							borderColor: hoveredButton === 'rect' ? colors.borderLight : colors.border,
+						}}
+						onMouseEnter={() => setHoveredButton('rect')}
+						onMouseLeave={() => setHoveredButton(null)}
+						onClick={addSolid}
+					>
+						▭ Shape
 					</button>
 				</>
 			)}
