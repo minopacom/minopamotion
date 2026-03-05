@@ -7,6 +7,7 @@ import type {
 	EditorTrack,
 	Transform,
 	Asset,
+	Transitions,
 } from './types.js';
 import { generateId } from './id.js';
 
@@ -17,6 +18,11 @@ const defaultTransform: Transform = {
 	height: 200,
 	rotation: 0,
 	opacity: 1,
+};
+
+const defaultTransitions: Transitions = {
+	in: null,
+	out: null,
 };
 
 export function createTextElement(
@@ -37,6 +43,7 @@ export function createTextElement(
 			width: 1360,
 			height: 200,
 		},
+		transitions: { ...defaultTransitions },
 		text: 'Add your text here',
 		fontSize: 96,
 		fontFamily: 'Arial, sans-serif',
@@ -60,6 +67,7 @@ export function createSolidElement(
 		from: 0,
 		durationInFrames: 150,
 		transform: { ...defaultTransform },
+		transitions: { ...defaultTransitions },
 		color: '#3b82f6',
 		borderRadius: 0,
 		...overrides,
@@ -79,6 +87,7 @@ export function createImageElement(
 		from: 0,
 		durationInFrames: 150,
 		transform: { ...defaultTransform },
+		transitions: { ...defaultTransitions },
 		src,
 		objectFit: 'contain',
 		...overrides,
@@ -98,6 +107,7 @@ export function createVideoElement(
 		from: 0,
 		durationInFrames: 150,
 		transform: { ...defaultTransform },
+		transitions: { ...defaultTransitions },
 		src,
 		objectFit: 'contain',
 		volume: 1,
@@ -119,6 +129,7 @@ export function createAudioElement(
 		from: 0,
 		durationInFrames: 150,
 		transform: { x: 0, y: 0, width: 100, height: 20, rotation: 0, opacity: 1 },
+		transitions: { ...defaultTransitions },
 		src,
 		volume: 1,
 		startFrom: 0,

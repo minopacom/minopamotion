@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { AbsoluteFill, Sequence } from '@minopamotion/core';
 import { useStudioState } from '../store/context.js';
 import { ElementRenderer } from './ElementRenderer.js';
-import type { EditorElement } from './types.js';
+import type { EditorElement, TimelineTransitionItem } from './types.js';
 
 export function EditorComposition() {
 	const { editorScene } = useStudioState();
-	const { elements, tracks, settings } = editorScene;
+	const { elements, tracks, settings, timelineTransitions } = editorScene;
 
 	// Build track order map: first track = bottom, last = top
 	const trackOrder = new Map<string, number>();
@@ -28,20 +28,37 @@ export function EditorComposition() {
 	return (
 		<AbsoluteFill>
 			{sortedElements.map((element) => (
-				<ElementSequenceWrapper key={element.id} element={element} fps={settings.fps} />
+				<ElementSequenceWrapper
+					key={element.id}
+					element={element}
+					fps={settings.fps}
+					timelineTransitions={timelineTransitions}
+				/>
 			))}
 		</AbsoluteFill>
 	);
 }
 
-function ElementSequenceWrapper({ element, fps }: { element: EditorElement; fps: number }) {
+function ElementSequenceWrapper({
+	element,
+	fps,
+	timelineTransitions,
+}: {
+	element: EditorElement;
+	fps: number;
+	timelineTransitions: TimelineTransitionItem[];
+}) {
 	return (
 		<Sequence
 			from={element.from}
 			durationInFrames={element.durationInFrames}
 			name={element.name}
 		>
-			<ElementRenderer element={element} fps={fps} />
+			<ElementRenderer
+				element={element}
+				fps={fps}
+				timelineTransitions={timelineTransitions}
+			/>
 		</Sequence>
 	);
 }

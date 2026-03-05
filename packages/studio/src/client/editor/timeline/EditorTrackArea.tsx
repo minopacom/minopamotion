@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useStudioState, useStudioDispatch } from '../../store/context.js';
 import { TrackControls } from './TrackControls.js';
 import { EditorTrackLane } from './EditorTrackLane.js';
 import { useTimelineDrag } from './useTimelineDrag.js';
 import { colors } from '../../utils/colors.js';
+import { generateId } from '../id.js';
+import type { TimelineTransitionEffect } from '../types.js';
 
 interface EditorTrackAreaProps {
 	durationInFrames: number;
@@ -92,6 +94,9 @@ export function EditorTrackArea({
 						const trackElements = editorScene.elements.filter(
 							(el) => el.trackId === track.id,
 						);
+						const trackTransitions = editorScene.timelineTransitions.filter(
+							(t) => t.trackId === track.id,
+						);
 						return (
 							<EditorTrackLane
 								key={track.id}
@@ -100,6 +105,8 @@ export function EditorTrackArea({
 								totalTracks={editorScene.tracks.length}
 								elements={trackElements}
 								selectedElementIds={selectedElementIds}
+								transitions={trackTransitions}
+								selectedTransitionIds={[]}
 								pxPerFrame={pxPerFrame}
 								fps={fps}
 								dispatch={dispatch}

@@ -5,6 +5,8 @@ import type {
 	Transform,
 	SceneSettings,
 	Asset,
+	Transition,
+	TimelineTransitionItem,
 } from './types.js';
 
 export type EditorAction =
@@ -44,6 +46,11 @@ export type EditorAction =
 	| { type: 'TOGGLE_TRACK_VISIBILITY'; trackId: string }
 	| { type: 'TOGGLE_TRACK_LOCK'; trackId: string }
 	| { type: 'TOGGLE_TRACK_MUTE'; trackId: string }
+	| { type: 'UPDATE_ELEMENT_TRANSITION_IN'; id: string; transition: Transition | null }
+	| { type: 'UPDATE_ELEMENT_TRANSITION_OUT'; id: string; transition: Transition | null }
+	| { type: 'ADD_TIMELINE_TRANSITION'; transition: TimelineTransitionItem }
+	| { type: 'UPDATE_TIMELINE_TRANSITION'; id: string; updates: Partial<TimelineTransitionItem> }
+	| { type: 'REMOVE_TIMELINE_TRANSITION'; id: string }
 	| { type: 'HISTORY_COMMIT' }
 	| { type: 'NUDGE_ELEMENTS'; ids: string[]; dx: number; dy: number }
 	| { type: 'HISTORY_UNDO' }
@@ -72,6 +79,7 @@ export function createInitialEditorState(): EditorState {
 			elements: [],
 			tracks: [],
 			assets: [],
+			timelineTransitions: [],
 		},
 		selectedElementIds: [],
 		editorHistory: [],
@@ -106,6 +114,11 @@ export function isEditorAction(action: { type: string }): action is EditorAction
 		'TOGGLE_TRACK_VISIBILITY',
 		'TOGGLE_TRACK_LOCK',
 		'TOGGLE_TRACK_MUTE',
+		'UPDATE_ELEMENT_TRANSITION_IN',
+		'UPDATE_ELEMENT_TRANSITION_OUT',
+		'ADD_TIMELINE_TRANSITION',
+		'UPDATE_TIMELINE_TRANSITION',
+		'REMOVE_TIMELINE_TRANSITION',
 		'NUDGE_ELEMENTS',
 		'HISTORY_COMMIT',
 		'HISTORY_UNDO',
@@ -464,6 +477,66 @@ export function editorReducer(
 						t.id === action.trackId
 							? { ...t, muted: !t.muted }
 							: t,
+					),
+				},
+			};
+
+		case 'UPDATE_ELEMENT_TRANSITION_IN':
+			return {
+				...state,
+				editorScene: {
+					...state.editorScene,
+					elements: state.editorScene.elements.map((el) =>
+						el.id === action.id
+							? { ...el, transitions: { ...el.transitions, in: action.transition } }
+							: el,
+					),
+				},
+			};
+
+		case 'UPDATE_ELEMENT_TRANSITION_OUT':
+			return {
+				...state,
+				editorScene: {
+					...state.editorScene,
+					elements: state.editorScene.elements.map((el) =>
+						el.id === action.id
+							? { ...el, transitions: { ...el.transitions, out: action.transition } }
+							: el,
+					),
+				},
+			};
+
+		case 'ADD_TIMELINE_TRANSITION':
+			return {
+				...state,
+				editorScene: {
+					...state.editorScene,
+					timelineTransitions: [
+						...state.editorScene.timelineTransitions,
+						action.transition,
+					],
+				},
+			};
+
+		case 'UPDATE_TIMELINE_TRANSITION':
+			return {
+				...state,
+				editorScene: {
+					...state.editorScene,
+					timelineTransitions: state.editorScene.timelineTransitions.map((t) =>
+						t.id === action.id ? { ...t, ...action.updates } : t,
+					),
+				},
+			};
+
+		case 'REMOVE_TIMELINE_TRANSITION':
+			return {
+				...state,
+				editorScene: {
+					...state.editorScene,
+					timelineTransitions: state.editorScene.timelineTransitions.filter(
+						(t) => t.id !== action.id,
 					),
 				},
 			};

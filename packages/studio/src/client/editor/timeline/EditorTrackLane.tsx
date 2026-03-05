@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import type { EditorTrack, EditorElement } from '../types.js';
+import type { EditorTrack, EditorElement, TimelineTransitionItem } from '../types.js';
 import type { StudioAction } from '../../store/types.js';
 import { TimelineItem } from './TimelineItem.js';
+import { TimelineTransitionItem as TransitionItemComponent } from './TimelineTransitionItem.js';
+import { useTransitionDrag } from './useTransitionDrag.js';
 import { colors } from '../../utils/colors.js';
+import { generateId } from '../id.js';
 
 interface EditorTrackLaneProps {
 	track: EditorTrack;
@@ -10,6 +13,8 @@ interface EditorTrackLaneProps {
 	totalTracks: number;
 	elements: EditorElement[];
 	selectedElementIds: string[];
+	transitions: TimelineTransitionItem[];
+	selectedTransitionIds: string[];
 	pxPerFrame: number;
 	fps: number;
 	dispatch: React.Dispatch<StudioAction>;
@@ -26,6 +31,8 @@ export function EditorTrackLane({
 	totalTracks,
 	elements,
 	selectedElementIds,
+	transitions,
+	selectedTransitionIds,
 	pxPerFrame,
 	fps,
 	dispatch,
@@ -35,8 +42,60 @@ export function EditorTrackLane({
 }: EditorTrackLaneProps) {
 	const [isRenaming, setIsRenaming] = useState(false);
 	const [renameName, setRenameName] = useState(track.name);
+	const { startDrag: startTransitionDrag } = useTransitionDrag(dispatch);
 
 	const layerNumber = totalTracks - trackIndex;
+
+	// Function to add a transition between two elements
+	const addTransitionBetween = (beforeEl: EditorElement, afterEl: EditorElement) => {
+		const transitionStart = beforeEl.from + beforeEl.durationInFrames - 15; // 15 frame overlap
+		const transitionId = generateId();
+
+		dispatch({
+			type: 'ADD_TIMELINE_TRANSITION',
+			transition: {
+				id: transitionId,
+				trackId: track.id,
+				from: transitionStart,
+				durationInFrames: 30, // 1 second at 30fps
+				effect: 'crossfade',
+				beforeElementId: beforeEl.id,
+				afterElementId: afterEl.id,
+			},
+		});
+		dispatch({ type: 'HISTORY_COMMIT' });
+	};
+
+	// Handle dropping transitions from the toolbar
+	const handleDrop = (e: React.DragEvent) => {
+		e.preventDefault();
+		const transitionEffect = e.dataTransfer.getData('application/transition') as TimelineTransitionEffect | '';
+
+		if (!transitionEffect) return;
+
+		// Calculate drop position
+		const rect = e.currentTarget.getBoundingClientRect();
+		const x = e.clientX - rect.left;
+		const frame = Math.round(x / pxPerFrame);
+
+		// Create transition at drop location
+		dispatch({
+			type: 'ADD_TIMELINE_TRANSITION',
+			transition: {
+				id: generateId(),
+				trackId: track.id,
+				from: Math.max(0, frame),
+				durationInFrames: 30, // Default 1 second at 30fps
+				effect: transitionEffect as TimelineTransitionEffect,
+			},
+		});
+		dispatch({ type: 'HISTORY_COMMIT' });
+	};
+
+	const handleDragOver = (e: React.DragEvent) => {
+		e.preventDefault();
+		e.dataTransfer.dropEffect = 'copy';
+	};
 
 	const handleRename = () => {
 		if (renameName.trim() && renameName !== track.name) {
@@ -212,6 +271,8 @@ export function EditorTrackLane({
 					flex: 1,
 					position: 'relative',
 				}}
+				onDrop={handleDrop}
+				onDragOver={handleDragOver}
 			>
 				{elements.map((el) => (
 					<TimelineItem
@@ -240,6 +301,76 @@ export function EditorTrackLane({
 						}}
 					/>
 				))}
+
+				{/* Render transitions */}
+				{transitions.map((trans) => (
+					<TransitionItemComponent
+						key={trans.id}
+						transition={trans}
+						pxPerFrame={pxPerFrame}
+						isSelected={selectedTransitionIds.includes(trans.id)}
+						onClick={(e) => {
+							e.stopPropagation();
+							dispatch({
+								type: 'SELECT_ELEMENTS',
+								ids: [],
+							});
+							// TODO: Add selection for transitions
+						}}
+						onPointerDownResize={(e, edge) => {
+							if (!track.locked) {
+								startTransitionDrag(e, trans, edge === 'left' ? 'resize-left' : 'resize-right', pxPerFrame);
+							}
+						}}
+						onPointerDownMove={(e) => {
+							if (!track.locked) {
+								startTransitionDrag(e, trans, 'move', pxPerFrame);
+							}
+						}}
+					/>
+				))}
+
+				{/* Button to add transition between consecutive clips */}
+				{elements.length > 1 && elements
+					.sort((a, b) => a.from - b.from)
+					.slice(0, -1)
+					.map((el, i) => {
+						const nextEl = elements.sort((a, b) => a.from - b.from)[i + 1];
+						const gap = nextEl.from - (el.from + el.durationInFrames);
+
+						// Only show button if there's a small gap (< 60 frames)
+						if (gap > 0 && gap < 60) {
+							const buttonX = (el.from + el.durationInFrames + gap / 2) * pxPerFrame;
+							return (
+								<button
+									key={`add-trans-${el.id}-${nextEl.id}`}
+									style={{
+										position: 'absolute',
+										left: buttonX - 12,
+										top: 18,
+										width: 24,
+										height: 24,
+										borderRadius: '50%',
+										background: colors.accent,
+										border: `2px solid ${colors.bgPanel}`,
+										color: colors.textBright,
+										fontSize: 14,
+										cursor: 'pointer',
+										display: 'flex',
+										alignItems: 'center',
+										justifyContent: 'center',
+										boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+										zIndex: 100,
+									}}
+									onClick={() => addTransitionBetween(el, nextEl)}
+									title="Add transition"
+								>
+									+
+								</button>
+							);
+						}
+						return null;
+					})}
 			</div>
 		</div>
 	);

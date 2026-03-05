@@ -6,6 +6,7 @@ import { FillSection } from './FillSection.js';
 import { TextSection } from './TextSection.js';
 import { SolidSection } from './SolidSection.js';
 import { MediaSection } from './MediaSection.js';
+import { TransitionControls } from './TransitionControls.js';
 import { colors } from '../../utils/colors.js';
 import type { StudioAction } from '../../store/types.js';
 import type {
@@ -16,7 +17,7 @@ import type {
 	AudioElement,
 } from '../types.js';
 
-type InspectorTab = 'video' | 'audio' | 'layout';
+type InspectorTab = 'video' | 'audio' | 'layout' | 'transitions';
 
 export function ElementInspector() {
 	const { editorScene, selectedElementIds } = useStudioState();
@@ -152,6 +153,24 @@ export function ElementInspector() {
 					>
 						📐 Layout
 					</button>
+					<button
+						onClick={() => setActiveTab('transitions')}
+						style={{
+							flex: 1,
+							padding: '6px 12px',
+							fontSize: 11,
+							fontWeight: 600,
+							background: activeTab === 'transitions' ? colors.bgSelected : colors.bgInput,
+							color: activeTab === 'transitions' ? colors.textBright : colors.textDim,
+							border: `1px solid ${activeTab === 'transitions' ? colors.accent : colors.border}`,
+							borderBottom: activeTab === 'transitions' ? `2px solid ${colors.accent}` : '1px solid transparent',
+							borderRadius: '4px 4px 0 0',
+							cursor: 'pointer',
+							transition: 'all 0.15s ease',
+						}}
+					>
+						✨ Transitions
+					</button>
 				</div>
 
 				{/* Tab content */}
@@ -180,6 +199,13 @@ export function ElementInspector() {
 							<div style={{ height: 1, background: colors.border, margin: '12px 0' }} />
 							<FillSection element={element} dispatch={dispatch} />
 						</>
+					)}
+					{activeTab === 'transitions' && (
+						<TransitionControls
+							elementId={element.id}
+							transitions={element.transitions}
+							dispatch={dispatch}
+						/>
 					)}
 				</div>
 			</div>
@@ -247,6 +273,14 @@ export function ElementInspector() {
 					dispatch={dispatch}
 				/>
 			)}
+
+			<div style={{ height: 1, background: colors.border }} />
+
+			<TransitionControls
+				elementId={element.id}
+				transitions={element.transitions}
+				dispatch={dispatch}
+			/>
 		</div>
 	);
 }

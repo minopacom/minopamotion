@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useStudioState, useStudioDispatch } from '../../store/context.js';
 import {
 	createAsset,
@@ -10,11 +10,28 @@ import {
 import { getMediaDurationInFrames } from '../utils/media-duration.js';
 import { getMediaDimensions, fitToCanvas } from '../utils/fit-to-canvas.js';
 import { colors } from '../../utils/colors.js';
+import type { TimelineTransitionEffect } from '../types.js';
+
+type LibraryTab = 'media' | 'transitions';
+
+const transitionOptions: Array<{ effect: TimelineTransitionEffect; label: string; icon: string }> = [
+	{ effect: 'crossfade', label: 'Crossfade', icon: '⨯' },
+	{ effect: 'dissolve', label: 'Dissolve', icon: '◐' },
+	{ effect: 'wipe-left', label: 'Wipe Left', icon: '←' },
+	{ effect: 'wipe-right', label: 'Wipe Right', icon: '→' },
+	{ effect: 'wipe-up', label: 'Wipe Up', icon: '↑' },
+	{ effect: 'wipe-down', label: 'Wipe Down', icon: '↓' },
+	{ effect: 'slide-left', label: 'Slide Left', icon: '⇐' },
+	{ effect: 'slide-right', label: 'Slide Right', icon: '⇒' },
+	{ effect: 'zoom-in', label: 'Zoom In', icon: '⊕' },
+	{ effect: 'zoom-out', label: 'Zoom Out', icon: '⊖' },
+];
 
 export function AssetLibrary() {
 	const { editorScene, compositions, selectedCompositionId } = useStudioState();
 	const dispatch = useStudioDispatch();
 	const fileInputRef = useRef<HTMLInputElement>(null);
+	const [activeTab, setActiveTab] = useState<LibraryTab>('media');
 
 	const handleFileUpload = (files: FileList | null) => {
 		if (!files) return;
@@ -154,6 +171,11 @@ export function AssetLibrary() {
 		dispatch({ type: 'HISTORY_COMMIT' });
 	};
 
+	const handleTransitionDragStart = (e: React.DragEvent, effect: TimelineTransitionEffect) => {
+		e.dataTransfer.setData('application/transition', effect);
+		e.dataTransfer.effectAllowed = 'copy';
+	};
+
 	return (
 		<div
 			style={{
@@ -163,7 +185,7 @@ export function AssetLibrary() {
 				background: colors.bgPanel,
 			}}
 		>
-			{/* Header */}
+			{/* Header with tabs */}
 			<div
 				style={{
 					padding: 8,
@@ -173,32 +195,59 @@ export function AssetLibrary() {
 					justifyContent: 'space-between',
 				}}
 			>
-				<span
-					style={{
-						fontSize: 11,
-						fontWeight: 600,
-						color: colors.textDim,
-						textTransform: 'uppercase',
-						letterSpacing: 1,
-					}}
-				>
-					Assets
-				</span>
-				<button
-					onClick={() => fileInputRef.current?.click()}
-					style={{
-						background: colors.accent,
-						color: colors.textBright,
-						border: 'none',
-						borderRadius: 3,
-						padding: '3px 8px',
-						fontSize: 10,
-						cursor: 'pointer',
-						fontWeight: 600,
-					}}
-				>
-					+ Upload
-				</button>
+				<div style={{ display: 'flex', gap: 4 }}>
+					<button
+						onClick={() => setActiveTab('media')}
+						style={{
+							background: activeTab === 'media' ? colors.accent : 'transparent',
+							color: activeTab === 'media' ? colors.textBright : colors.textDim,
+							border: 'none',
+							borderRadius: 3,
+							padding: '4px 8px',
+							fontSize: 10,
+							cursor: 'pointer',
+							fontWeight: 600,
+							textTransform: 'uppercase',
+							letterSpacing: 0.5,
+						}}
+					>
+						Media
+					</button>
+					<button
+						onClick={() => setActiveTab('transitions')}
+						style={{
+							background: activeTab === 'transitions' ? colors.accent : 'transparent',
+							color: activeTab === 'transitions' ? colors.textBright : colors.textDim,
+							border: 'none',
+							borderRadius: 3,
+							padding: '4px 8px',
+							fontSize: 10,
+							cursor: 'pointer',
+							fontWeight: 600,
+							textTransform: 'uppercase',
+							letterSpacing: 0.5,
+						}}
+					>
+						Transitions
+					</button>
+				</div>
+				{activeTab === 'media' && (
+					<button
+						onClick={() => fileInputRef.current?.click()}
+						style={{
+							background: colors.accent,
+							color: colors.textBright,
+							border: 'none',
+							borderRadius: 3,
+							padding: '3px 8px',
+							fontSize: 10,
+							cursor: 'pointer',
+							fontWeight: 600,
+						}}
+					>
+						+ Upload
+					</button>
+				)}
 			</div>
 
 			{/* Hidden file input */}
@@ -211,128 +260,188 @@ export function AssetLibrary() {
 				onChange={(e) => handleFileUpload(e.target.files)}
 			/>
 
-			{/* Asset grid */}
-			<div
-				style={{
-					flex: 1,
-					overflowY: 'auto',
-					padding: 8,
-					display: 'grid',
-					gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))',
-					gap: 8,
-					alignContent: 'start',
-				}}
-			>
-				{editorScene.assets.length === 0 ? (
-					<div
-						style={{
-							gridColumn: '1 / -1',
-							padding: 16,
-							textAlign: 'center',
-							color: colors.textMuted,
-							fontSize: 11,
-						}}
-					>
-						No assets. Click "+ Upload" to add media.
-					</div>
-				) : (
-					editorScene.assets.map((asset) => (
+			{/* Content area - Media tab */}
+			{activeTab === 'media' && (
+				<div
+					style={{
+						flex: 1,
+						overflowY: 'auto',
+						padding: 8,
+						display: 'grid',
+						gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))',
+						gap: 8,
+						alignContent: 'start',
+					}}
+				>
+					{editorScene.assets.length === 0 ? (
 						<div
-							key={asset.id}
-							onClick={() => handleAssetClick(asset.id)}
 							style={{
-								position: 'relative',
-								aspectRatio: '1',
-								background: colors.bgInput,
-								borderRadius: 4,
-								overflow: 'hidden',
-								cursor: 'pointer',
-								border: `1px solid ${colors.border}`,
+								gridColumn: '1 / -1',
+								padding: 16,
+								textAlign: 'center',
+								color: colors.textMuted,
+								fontSize: 11,
 							}}
 						>
-							{/* Thumbnail */}
-							{asset.type === 'image' && (
-								<img
-									src={asset.src}
-									alt={asset.name}
+							No assets. Click "+ Upload" to add media.
+						</div>
+					) : (
+						editorScene.assets.map((asset) => (
+							<div
+								key={asset.id}
+								onClick={() => handleAssetClick(asset.id)}
+								style={{
+									position: 'relative',
+									aspectRatio: '1',
+									background: colors.bgInput,
+									borderRadius: 4,
+									overflow: 'hidden',
+									cursor: 'pointer',
+									border: `1px solid ${colors.border}`,
+								}}
+							>
+								{/* Thumbnail */}
+								{asset.type === 'image' && (
+									<img
+										src={asset.src}
+										alt={asset.name}
+										style={{
+											width: '100%',
+											height: '100%',
+											objectFit: 'cover',
+										}}
+									/>
+								)}
+								{asset.type === 'video' && (
+									<video
+										src={asset.src}
+										style={{
+											width: '100%',
+											height: '100%',
+											objectFit: 'cover',
+										}}
+									/>
+								)}
+								{asset.type === 'audio' && (
+									<div
+										style={{
+											width: '100%',
+											height: '100%',
+											display: 'flex',
+											alignItems: 'center',
+											justifyContent: 'center',
+											fontSize: 24,
+										}}
+									>
+										🎵
+									</div>
+								)}
+
+								{/* Delete button */}
+								<button
+									onClick={(e) => handleDelete(asset.id, e)}
 									style={{
-										width: '100%',
-										height: '100%',
-										objectFit: 'cover',
-									}}
-								/>
-							)}
-							{asset.type === 'video' && (
-								<video
-									src={asset.src}
-									style={{
-										width: '100%',
-										height: '100%',
-										objectFit: 'cover',
-									}}
-								/>
-							)}
-							{asset.type === 'audio' && (
-								<div
-									style={{
-										width: '100%',
-										height: '100%',
+										position: 'absolute',
+										top: 2,
+										right: 2,
+										background: 'rgba(0,0,0,0.7)',
+										color: colors.textBright,
+										border: 'none',
+										borderRadius: 3,
+										width: 18,
+										height: 18,
+										fontSize: 12,
+										cursor: 'pointer',
 										display: 'flex',
 										alignItems: 'center',
 										justifyContent: 'center',
-										fontSize: 24,
 									}}
 								>
-									🎵
+									×
+								</button>
+
+								{/* Name */}
+								<div
+									style={{
+										position: 'absolute',
+										bottom: 0,
+										left: 0,
+										right: 0,
+										background: 'rgba(0,0,0,0.7)',
+										color: colors.textBright,
+										fontSize: 9,
+										padding: 2,
+										overflow: 'hidden',
+										textOverflow: 'ellipsis',
+										whiteSpace: 'nowrap',
+									}}
+									title={asset.name}
+								>
+									{asset.name}
 								</div>
-							)}
-
-							{/* Delete button */}
-							<button
-								onClick={(e) => handleDelete(asset.id, e)}
-								style={{
-									position: 'absolute',
-									top: 2,
-									right: 2,
-									background: 'rgba(0,0,0,0.7)',
-									color: colors.textBright,
-									border: 'none',
-									borderRadius: 3,
-									width: 18,
-									height: 18,
-									fontSize: 12,
-									cursor: 'pointer',
-									display: 'flex',
-									alignItems: 'center',
-									justifyContent: 'center',
-								}}
-							>
-								×
-							</button>
-
-							{/* Name */}
-							<div
-								style={{
-									position: 'absolute',
-									bottom: 0,
-									left: 0,
-									right: 0,
-									background: 'rgba(0,0,0,0.7)',
-									color: colors.textBright,
-									fontSize: 9,
-									padding: 2,
-									overflow: 'hidden',
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-								}}
-								title={asset.name}
-							>
-								{asset.name}
 							</div>
+						))
+					)}
+				</div>
+			)}
+
+			{/* Content area - Transitions tab */}
+			{activeTab === 'transitions' && (
+				<div
+					style={{
+						flex: 1,
+						overflowY: 'auto',
+						padding: 8,
+						display: 'flex',
+						flexDirection: 'column',
+						gap: 6,
+					}}
+				>
+					<div
+						style={{
+							fontSize: 10,
+							color: colors.textMuted,
+							padding: '4px 0',
+						}}
+					>
+						Drag transitions onto the timeline
+					</div>
+					{transitionOptions.map((option) => (
+						<div
+							key={option.effect}
+							draggable
+							onDragStart={(e) => handleTransitionDragStart(e, option.effect)}
+							style={{
+								background: 'linear-gradient(135deg, #7c3aed88 0%, #a855f7AA 100%)',
+								border: `1px solid ${colors.border}`,
+								borderRadius: 4,
+								padding: '8px 12px',
+								cursor: 'grab',
+								display: 'flex',
+								alignItems: 'center',
+								gap: 8,
+								fontSize: 11,
+								color: colors.textBright,
+								fontWeight: 500,
+								userSelect: 'none',
+								transition: 'transform 0.1s ease',
+							}}
+							onMouseDown={(e) => {
+								e.currentTarget.style.transform = 'scale(0.98)';
+							}}
+							onMouseUp={(e) => {
+								e.currentTarget.style.transform = 'scale(1)';
+							}}
+							onMouseLeave={(e) => {
+								e.currentTarget.style.transform = 'scale(1)';
+							}}
+						>
+							<span style={{ fontSize: 16 }}>{option.icon}</span>
+							<span>{option.label}</span>
 						</div>
-					))
-				)}
-			</div>
+					))}
+				</div>
+			)}
 		</div>
 	);
 }
